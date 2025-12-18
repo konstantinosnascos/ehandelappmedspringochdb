@@ -1,6 +1,8 @@
 package com.example.ecommerce.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +27,7 @@ public class Product {
     private String description;
 
     @Column(name = "price", nullable = false)
-    private double price;
+    private BigDecimal price;
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
@@ -35,14 +37,14 @@ public class Product {
 
     public Product() {} //krävs no-arg konstruktor
 
-    public Product(String sku, String name, String description, double price) {
+    public Product(String sku, String name, String description, BigDecimal price, boolean active, LocalDateTime createdAt) {
         this.sku = sku;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.active = true;
+        this.active = active;
+        this.createdAt = createdAt;
     }
-
 
 //    Alternativ:
 //    @PreUpdate - Före uppdatering
@@ -94,11 +96,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
