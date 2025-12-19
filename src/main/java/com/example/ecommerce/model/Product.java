@@ -15,10 +15,10 @@ public class Product {
     @Column(name = "sku", unique = true, nullable = false, length = 50)
     private String sku;
 
-    @Column(name = "name", nullable = false, length = 100)  // Ändrat från 200
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")  // Ändrat till TEXT
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
