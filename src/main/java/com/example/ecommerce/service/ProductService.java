@@ -18,4 +18,19 @@ public class ProductService {
     {
         return productRepository.findByActive(true);
     }
+
+    public Optional<Product> getProductBySku(String sku)
+    {
+        return productRepository.findBySku(sku);
+
+    }
+
+    public Product createProduct(Product product)
+    {
+        if(productRepository.existsBySku(product.getSku()))
+        {
+            throw new IllegalArgumentException("Product with SKU" + product.getSku() + " already exists");
+        } return productRepository.save(product);
+    }
+
 }
