@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductRepositoryTest {
 
     @Autowired
@@ -25,14 +24,7 @@ class ProductRepositoryTest {
     void shouldSaveAndFindProductBySku() {
 
         // given
-        Product product = new Product(
-                "SKU-123",
-                "Test Product",
-                "Test description",
-                new BigDecimal("99.90"),
-                false,      // sätt false för att testa @PrePersist
-                null        // låt @PrePersist sätta createdAt
-        );
+        Product product = new Product("SKU-1", "Coca cola", "Coca light", 2.99);
 
         // when
         repository.save(product);
