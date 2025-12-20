@@ -1,15 +1,12 @@
 package com.example.ecommerce.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
 public class Product {
-
-//    @Id: Detta är primärnyckeln
-//    @GeneratedValue: Databasen genererar ID automatiskt (auto-increment)
-//    IDENTITY: Använder databas-specifik auto-increment (t.ex. PostgreSQL SERIAL)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +15,14 @@ public class Product {
     @Column(name = "sku", unique = true, nullable = false, length = 50)
     private String sku;
 
-    @Column(name = "name", nullable = false, length = 200)
+    @Column(name = "name", nullable = false, length = 100)  // Ändrat från 200
     private String name;
 
-    @Column(name = "description", length = 1000)
+    @Column(name = "description", columnDefinition = "TEXT")  // Ändrat till TEXT
     private String description;
 
-    @Column(name = "price", nullable = false)
-    private double price;
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;  // Ändrat från double
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
@@ -33,9 +30,18 @@ public class Product {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Product() {} //krävs no-arg konstruktor
+    // TODO: Lägg till Category-relation senare
+    // @ManyToMany
+    // @JoinTable(
+    //     name = "product_category",
+    //     joinColumns = @JoinColumn(name = "product_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "category_id")
+    // )
+    // private Set<Category> categories = new HashSet<>();
 
-    public Product(String sku, String name, String description, double price) {
+    public Product() {}
+
+    public Product(String sku, String name, String description, BigDecimal price) {
         this.sku = sku;
         this.name = name;
         this.description = description;
@@ -43,80 +49,43 @@ public class Product {
         this.active = true;
     }
 
+    public Product(String sku, String name, String description, double price) {
+        this(sku, name, description, BigDecimal.valueOf(price));
+    }
 
-//    Alternativ:
-//    @PreUpdate - Före uppdatering
-//    @PostPersist - Efter sparning
-//    @PostLoad - Efter laddning från DB
-//
-
-    // Lifecycle callback - körs automatiskt innan entitet sparas första gången
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
-        if (active == false) { // om inte satt
-            active = true;
-        }
     }
 
-    // Getters & Setters (SAMMA som innan, ingen ändring)
-    public Long getId() {
-        return id;
-    }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
 
-    public String getSku() {
-        return sku;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getName() {
-        return name;
-    }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
 
     public void setPrice(double price) {
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
     }
 
-    public boolean isActive() {
-        return active;
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     @Override
     public String toString() {
@@ -124,18 +93,3 @@ public class Product {
                 sku, name, price, active ? "" : " (INAKTIV)");
     }
 }
-
-
-//SQL som genereras:
-//När du startar applikationen skapar Hibernate denna tabell:
-//
-//sql
-//CREATE TABLE products (
-//        id BIGSERIAL PRIMARY KEY,
-//        sku VARCHAR(50) NOT NULL UNIQUE,
-//name VARCHAR(200) NOT NULL,
-//description VARCHAR(1000),
-//price DOUBLE PRECISION NOT NULL,
-//active BOOLEAN NOT NULL DEFAULT true,
-//created_at TIMESTAMP NOT NULL
-//);
