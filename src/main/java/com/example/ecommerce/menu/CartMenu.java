@@ -18,14 +18,19 @@ public class CartMenu {
 
     public void show(Customer customer) {
 
-        Optional<Cart> cartOptional = cartService.getCart(customer);
-
-        if (cartOptional.isEmpty() || cartOptional.get().getItems().isEmpty()) {
+        Cart cart;
+        try{
+            cart = cartService.getCartWithItems(customer);
+        } catch (Exception e) {
             System.out.println("Din varukorg är tom");
             return;
         }
 
-        Cart cart = cartOptional.get();
+        if(cart.getItems().isEmpty())
+        {
+            System.out.println("Din varukorg är tom");
+            return;
+        }
 
         System.out.println("\n=== DIN VARUKORG ===");
 
@@ -34,19 +39,14 @@ public class CartMenu {
 
         for (CartItem item : cart.getItems()) {
 
-            BigDecimal lineTotal =
-                    item.getProduct().getPrice()
-                            .multiply(BigDecimal.valueOf(item.getQty()));
-
+            BigDecimal lineTotal = item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQty()));
             total = total.add(lineTotal);
 
-            System.out.printf(
-                    "%d. %s | %d st | %s kr%n",
-                    index++,
-                    item.getProduct().getName(),
-                    item.getQty(),
-                    lineTotal
-            );
+            System.out.println(index++ + ". " + item.getProduct().getName());
+            System.out.println("   Antal: " + item.getQty());
+            System.out.println("   Pris/st: " + item.getProduct().getPrice() + " kr");
+            System.out.println("   Radtotal: " + lineTotal + " kr");
+            System.out.println();
         }
 
 
@@ -60,16 +60,9 @@ public class CartMenu {
 
         String choice = scanner.nextLine();
 
-        switch (choice) {
-            case "1":
-                System.out.println("Checkout kommer här (nästa steg)");
-                break;
-
-            case "0":
-                return;
-
-            default:
-                System.out.println("Ogiltigt val");
+        if("1".equals(choice))
+        {
+            System.out.println("Checkout kommer här (nästa steg)");
         }
     }
 }
