@@ -51,10 +51,13 @@ public class CartService {
     {
         cartRepository.delete(cart);
     }
-
-    public Optional<Cart> getCart(Customer customer)
+    @Transactional(readOnly = true)
+    public Cart getCartWithItems(Customer customer)
     {
-        return cartRepository.findByCustomer(customer);
+       Cart cart = cartRepository.findByCustomer(customer).orElseThrow(()-> new RuntimeException("Ingen varukorg hittades"));
+
+       cart.getItems().size();
+       return cart;
     }
 
 
