@@ -3,7 +3,6 @@ package com.example.ecommerce.repository;
 
 import com.example.ecommerce.model.Inventory;
 import com.example.ecommerce.model.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
