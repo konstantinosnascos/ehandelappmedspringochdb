@@ -8,7 +8,8 @@ import java.util.Optional;
 
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>
+{
 
     // Hibernate genererar implementationen automatiskt från metodnamnet!
     Optional<Product> findBySku(String sku);
@@ -18,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsBySku(String sku);
 
     List<Product> findByActive(boolean active);
+
+    List<Product> findProductsWithLowStock(int threshold);
 
     // findAll(), findById(), save(), delete() finns redan från JpaRepository och behöver inte skapas
 
