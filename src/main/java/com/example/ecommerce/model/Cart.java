@@ -13,30 +13,25 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToOne(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "cart",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<CartItem> items = new ArrayList<>();
 
+    public Cart() {} // JPA kräver denna
+
     public Cart(Customer customer) {
-        this.items = items;
         this.customer = customer;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
+    // getters
+    public Long getId() { return id; }
+    public Customer getCustomer() { return customer; }
+    public List<CartItem> getItems() { return items; }
 }

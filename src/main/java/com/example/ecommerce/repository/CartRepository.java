@@ -9,4 +9,6 @@ import java.util.*;
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
     Optional<Cart> findByCustomer(Customer customer);
+
+
 }
