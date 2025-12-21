@@ -6,6 +6,8 @@ import com.example.ecommerce.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 public class OrderService {
 
@@ -16,19 +18,31 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(Customer customer, Product product, int quantity)
+    public Order createOrderFromCart(Cart cart)
     {
         Order order = new Order();
-        order.setCustomer(customer);
+        order.setCustomer(cart.getCustomer());
+        order.setStatus(OrderStatus.NEW);
 
-        OrderItem item = new OrderItem();
-        item.setOrder(order);
-        item.setProduct(product);
-        item.setQty(quantity);
-        item.setUnitPrice(product.getPrice());
+        BigDecimal total = BigDecimal.ZERO;
 
-        order.getItems().add(item);
+        for(CartItem ci : cart.getItems())
+        {
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setProduct(ci.getProduct());
+            item.setQty(ci.getQty());
+            item.setUnitPrice(ci.getProduct().getPrice());
+            BigDecimal lineTotal = item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQty()));
 
+            item.setLineTotal(lineTotal);
+            total = total.add(lineTotal);
+
+            order.getItems().add(item);
+        }
+        order.setTotal(total);
+
+        Order savedOrder = orderRepository.save(order);
         return orderRepository.save(order);
     }
 
