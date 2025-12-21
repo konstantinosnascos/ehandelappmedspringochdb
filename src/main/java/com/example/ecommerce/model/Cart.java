@@ -19,6 +19,11 @@ public class Cart {
     @OneToOne(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 
+    public Cart(Customer customer) {
+        this.items = items;
+        this.customer = customer;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
