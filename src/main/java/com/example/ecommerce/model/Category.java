@@ -13,10 +13,13 @@ public class Category {
     @Column(name = "name", nullable = false, unique = true, length = 100)
     private String name;
 
+    //Tom konstruktor för jpa
+    protected Category() {}
 
-    protected Category()
+    //Konstruktor för använding i andra Service klasser
+    public Category(String name)
     {
-        //Tom konstruktor för jpa
+        this.name = name;
     }
 
 
