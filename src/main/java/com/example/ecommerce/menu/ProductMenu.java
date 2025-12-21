@@ -2,7 +2,11 @@ package com.example.ecommerce.menu;
 
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.ProductService;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
+
+@Component
 public class ProductMenu {
 
     private final ProductService productService;
