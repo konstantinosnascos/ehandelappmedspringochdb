@@ -18,4 +18,28 @@ public class CartItem {
 
     @Column(nullable = false)
     private int qty;
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
 }
