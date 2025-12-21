@@ -15,7 +15,7 @@ public class CustomerMenu {
         this.customerService = customerService;
     }
 
-    public Customer createCustomer()
+    public void createCustomer()
     {
         System.out.println("\n=== KUNDUPPGIFTER ===");
 
@@ -25,6 +25,8 @@ public class CustomerMenu {
         System.out.println("Namn: ");
         String name = scanner.nextLine();
 
-        return customerService.createCustomer(email, name);
+        customerService.createCustomer(email, name);
+
+        System.out.println("Kund registrerad!");
     }
 }

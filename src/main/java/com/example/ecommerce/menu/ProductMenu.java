@@ -10,10 +10,12 @@ import java.util.*;
 public class ProductMenu {
 
     private final ProductService productService;
+    private final CustomerMenu customerMenu;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ProductMenu(ProductService productService) {
+    public ProductMenu(ProductService productService, CustomerMenu customerMenu) {
         this.productService = productService;
+        this.customerMenu = customerMenu;
     }
 
     public void show()
@@ -50,7 +52,9 @@ public class ProductMenu {
             Product selectedProduct = products.get(selectedIndex);
 
             System.out.println("Du valde: " + selectedProduct.getName());
+            System.out.println("\nDu behöver ange kunduppgifter för att fortsätta");
 
+            customerMenu.createCustomer();
 
         } catch (Exception e)
         {
