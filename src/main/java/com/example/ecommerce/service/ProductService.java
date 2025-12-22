@@ -19,6 +19,10 @@ public class ProductService {
         return productRepository.findByActive(true);
     }
 
+    public List<Product> getProductsByCategory(String categoryName) {
+        return productRepository.findByCategoriesNameIgnoreCase(categoryName);
+    }
+
     public Optional<Product> getProductBySku(String sku)
     {
         return productRepository.findBySku(sku);

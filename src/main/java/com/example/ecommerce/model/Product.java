@@ -3,6 +3,8 @@ package com.example.ecommerce.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -30,14 +32,14 @@ public class Product {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // TODO: Lägg till Category-relation senare
-    // @ManyToMany
-    // @JoinTable(
-    //     name = "product_category",
-    //     joinColumns = @JoinColumn(name = "product_id"),
-    //     inverseJoinColumns = @JoinColumn(name = "category_id")
-    // )
-    // private Set<Category> categories = new HashSet<>();
+     //TODO: Lägg till Category-relation senare
+     @ManyToMany
+     @JoinTable(
+         name = "product_category",
+         joinColumns = @JoinColumn(name = "product_id"),
+         inverseJoinColumns = @JoinColumn(name = "category_id")
+     )
+     private Set<Category> categories = new HashSet<>();
 
     public Product() {}
 
