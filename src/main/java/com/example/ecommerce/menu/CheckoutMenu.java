@@ -3,7 +3,9 @@ package com.example.ecommerce.menu;
 import com.example.ecommerce.model.*;
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.service.CartService;
+import com.example.ecommerce.service.InventoryService;
 import com.example.ecommerce.service.OrderService;
+import com.example.ecommerce.service.PaymentService;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -13,11 +15,15 @@ public class CheckoutMenu {
 
     private final OrderService orderService;
     private final CartService cartService;
+    private final PaymentService paymentService;
+    private final InventoryService inventoryService;
     private final Scanner scanner = new Scanner(System.in);
 
-    public CheckoutMenu(OrderService orderService, CartService cartService) {
+    public CheckoutMenu(OrderService orderService, CartService cartService, PaymentService paymentService, InventoryService inventoryService) {
         this.orderService = orderService;
         this.cartService = cartService;
+        this.inventoryService = inventoryService;
+        this.paymentService = paymentService;
     }
 
     public void checkout(Customer customer) {
@@ -29,21 +35,61 @@ public class CheckoutMenu {
             return;
         }
 
+        for (CartItem item : cart.getItems())
+        {
+            if (!inventoryService.hasStock(item.getProduct().getId(), item.getQty()))
+            {
+                System.out.println("Otillräckligt lager för: " + item.getProduct().getName());
+                return;
+            }
+        }
+
         System.out.println("\n=== CHECKOUT ===");
-        System.out.println("Vill du slutföra köpet?");
-        System.out.println("1. Ja");
+        System.out.println("Välj betalmetod:");
+        System.out.println("1. Kort");
+        System.out.println("2. Faktura");
         System.out.println("0. Avbryt");
         System.out.print("Ditt val: ");
 
         String choice = scanner.nextLine();
 
-        if ("1".equals(choice)) {
-            Order order = orderService.createOrderFromCart(cart);
-            cartService.clearCart(cart);
+        PaymentMethod method = switch (choice) {
+            case "1" -> PaymentMethod.CARD;
+            case "2" -> PaymentMethod.INVOICE;
+            default -> {
+                System.out.println("Checkout avbruten");
+                yield null;
+            }
+        };
 
-            System.out.println("Order skapad!");
-            System.out.println("Order-ID: " + order.getId());
-            System.out.println("Total: " + order.getTotal() + " kr");
+        if (method == null) return;
+
+        try {
+            for (CartItem item : cart.getItems()) {
+                inventoryService.decrease(item.getProduct().getId(), item.getQty());
+            }
+
+            Order order = orderService.createOrderFromCart(cart);
+
+            Payment payment = paymentService.processingPayment(order, method);
+
+            if (payment.getStatus() == PaymentStatus.APPROVED) {
+                orderService.markAsPaid(order.getId());
+                System.out.println("Betalning godkänd!");
+                System.out.println("Order-ID: " + order.getId());
+                System.out.println("Total: " + order.getTotal() + " kr");
+
+                cartService.clearCart(cart);
+            } else {
+                for (CartItem item : cart.getItems()) {
+                    inventoryService.increase(item.getProduct().getId(), item.getQty());
+                }
+                orderService.cancelOrder(order.getId());
+                System.out.println("Betalning nekad");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Checkout misslyckades: " + e.getMessage());
         }
     }
 }

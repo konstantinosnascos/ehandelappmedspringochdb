@@ -1,5 +1,6 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.exception.InsufficientStockException;
 import com.example.ecommerce.model.*;
 import com.example.ecommerce.repository.CartRepository;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,12 @@ import java.util.*;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final InventoryService inventoryService;
 
-    public CartService(CartRepository cartRepository) {
+
+    public CartService(CartRepository cartRepository, InventoryService inventoryService) {
         this.cartRepository = cartRepository;
+        this.inventoryService = inventoryService;
     }
 
     public Cart getOrCreateCart(Customer customer)
@@ -24,6 +28,11 @@ public class CartService {
 
     public void addProduct(Customer customer, Product product, int qty)
     {
+        if (!inventoryService.hasStock(product.getId(), qty)) {
+            throw new InsufficientStockException(
+                    "Otillräckligt lager för " + product.getName()
+            );
+        }
         Cart cart = getOrCreateCart(customer);
 
         Optional<CartItem> existing = cart.getItems().stream()
@@ -32,15 +41,17 @@ public class CartService {
 
         if(existing.isPresent())
         {
-            existing.get().setQty(existing.get().getQty() + qty);
+            int newQty = existing.get().getQty() + qty;
+            if (!inventoryService.hasStock(product.getId(), newQty)) {
+                throw new InsufficientStockException("Otillräckligt lager");
+            }
+            existing.get().setQty(newQty);
         } else {
             CartItem item = new CartItem();
             item.setCart(cart);
             item.setProduct(product);
             item.setQty(qty);
             cart.getItems().add(item);
-
-
         }
 
         cartRepository.save(cart);
