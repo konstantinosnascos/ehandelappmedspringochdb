@@ -17,7 +17,7 @@ public class CategoryService {
     }
 
     //Hämta alla kategorier
-    public List<Category> getAllCatergories() {
+    public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 

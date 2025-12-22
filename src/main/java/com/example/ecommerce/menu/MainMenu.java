@@ -40,7 +40,7 @@ public class MainMenu {
             switch (choice) {
                 case "1":
                     ensureCustomerExists();
-                    productMenu.show(activeCustomer);
+                    productMenu.show2(activeCustomer);
                     break;
                 case "2":
                     ensureCustomerExists();
