@@ -5,6 +5,7 @@ import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.CartService;
 import com.example.ecommerce.service.CategoryService;
+import com.example.ecommerce.service.InventoryService;
 import com.example.ecommerce.service.ProductService;
 import org.springframework.stereotype.Component;
 
@@ -14,20 +15,21 @@ import java.util.*;
 public class ProductMenu {
     private final CartMenu cartMenu;
     private final CustomerMenu customerMenu;
-
     private final CartService cartService;
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final InventoryService inventoryService;
 
     private final Scanner scanner = new Scanner(System.in);
 
 
-    public ProductMenu(CartMenu cartMenu, CartService cartService, ProductService productService, CustomerMenu customerMenu, CategoryService categoryService) {
+    public ProductMenu(CartMenu cartMenu, CartService cartService, ProductService productService, CustomerMenu customerMenu, CategoryService categoryService, InventoryService inventoryService) {
         this.cartMenu = cartMenu;
         this.cartService = cartService;
         this.productService = productService;
         this.customerMenu = customerMenu;
         this.categoryService = categoryService;
+        this.inventoryService = inventoryService;
     }
 
     public void show2(Customer customer) {
@@ -86,12 +88,22 @@ public class ProductMenu {
             while (running) {
                 System.out.println("\n=== PRODUKTER ===");
 
+
                 int index = 1;
                 for (Product p : productsToShow) {
-                    System.out.printf(
-                            "%d. %s - %s kr%n",
-                            index++, p.getName(), p.getPrice()
-                    );
+
+                    int stock = inventoryService.getStockLevel(p.getId());
+                    if (stock == 0) {
+                        System.out.printf(
+                                "%d. %s - %s kr (SLUT I LAGER)%n",
+                                index++, p.getName(), p.getPrice()
+                        );
+                    } else {
+                        System.out.printf(
+                                "%d. %s - %s kr (i lager: %d st)%n",
+                                index++, p.getName(), p.getPrice(), stock
+                        );
+                    }
                 }
 
                 System.out.println("0. Tillbaka");

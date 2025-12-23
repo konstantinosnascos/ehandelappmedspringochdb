@@ -20,10 +20,16 @@ public class CartService {
         this.cartRepository = cartRepository;
         this.inventoryService = inventoryService;
     }
-
+    @Transactional
     public Cart getOrCreateCart(Customer customer)
     {
-        return cartRepository.findByCustomer(customer).orElseGet(() -> cartRepository.save(new Cart(customer)));
+        return cartRepository.findByCustomerWithItems(customer).orElseGet(() -> cartRepository.save(new Cart(customer)));
+    }
+
+    @Transactional(readOnly = true)
+    public Cart getCart(Customer customer)
+    {
+        return cartRepository.findByCustomerWithItems(customer).orElse(null);
     }
 
     public void addProduct(Customer customer, Product product, int qty)
@@ -65,7 +71,7 @@ public class CartService {
     @Transactional(readOnly = true)
     public Cart getCartWithItems(Customer customer)
     {
-       Cart cart = cartRepository.findByCustomer(customer).orElseThrow(()-> new RuntimeException("Ingen varukorg hittades"));
+       Cart cart = cartRepository.findByCustomerWithItems(customer).orElseThrow(()-> new RuntimeException("Ingen varukorg hittades"));
 
        cart.getItems().size();
        return cart;
