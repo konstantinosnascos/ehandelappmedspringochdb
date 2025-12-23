@@ -1,5 +1,6 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.exception.OrderNotFoundException;
 import com.example.ecommerce.model.*;
 import com.example.ecommerce.model.Order;
 import com.example.ecommerce.repository.OrderRepository;
@@ -42,9 +43,27 @@ public class OrderService {
         }
         order.setTotal(total);
 
-        Order savedOrder = orderRepository.save(order);
         return orderRepository.save(order);
     }
+
+    @Transactional
+    public void markAsPaid(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order " + orderId + " finns inte"));
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order " + orderId + " finns inte"));
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+}
+
+
 
     //Hämta alla ordrar
     //    Hämta order med id
@@ -53,5 +72,3 @@ public class OrderService {
     //    Skapa order
     //    Avbryt order
     //    Sätt status PAID
-
-}
