@@ -4,11 +4,13 @@ import com.example.ecommerce.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 class ProductRepositoryTest {
 
     @Autowired
@@ -24,10 +26,10 @@ class ProductRepositoryTest {
         repository.save(product);
 
         // then
-        var found = repository.findBySku("SKU-123");
+        var found = repository.findBySku("SKU-1");
 
         assertThat(found).isPresent();
-        assertThat(found.get().getName()).isEqualTo("Test Product");
+        assertThat(found.get().getName()).isEqualTo("Coca cola");
         assertThat(found.get().isActive()).isTrue();          // @PrePersist
         assertThat(found.get().getCreatedAt()).isNotNull();   // @PrePersist
     }
