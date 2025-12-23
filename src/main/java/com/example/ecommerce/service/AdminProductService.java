@@ -58,4 +58,23 @@ public class AdminProductService {
         inventory.setInStock(newStock);
         inventoryRepository.save(inventory);
     }
+    public void updateProduct(Long productId, String name, String description, BigDecimal price) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Produkt hittades inte"));
+
+        if (name != null && !name.isBlank()) {
+            product.setName(name);
+        }
+
+        if (description != null && !description.isBlank()) {
+            product.setDescription(description);
+        }
+
+        if (price != null) {
+            product.setPrice(price);
+        }
+
+        productRepository.save(product);
+    }
+
 }
