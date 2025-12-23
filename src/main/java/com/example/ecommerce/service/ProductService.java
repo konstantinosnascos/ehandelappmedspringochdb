@@ -33,6 +33,10 @@ public class ProductService {
 
     }
 
+    public Product updateProduct(Product product) {
+        return productRepository.save(product);
+    }
+
     public Product createProduct(Product product)
     {
         if(productRepository.existsBySku(product.getSku()))
@@ -40,5 +44,11 @@ public class ProductService {
             throw new IllegalArgumentException("Product with SKU" + product.getSku() + " already exists");
         } return productRepository.save(product);
     }
+    public List<Product> listInactiveProducts() {
+        return productRepository.findByActive(false);
+    }
 
+    public Optional<Product> findBySku(String sku) {
+        return productRepository.findBySku(sku);
+    }
 }

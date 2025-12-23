@@ -1,253 +1,139 @@
 package com.example.ecommerce.menu;
 
-import com.example.ecommerce.model.Category;
-import com.example.ecommerce.model.Customer;
+import com.example.ecommerce.helper.InputHelper;
 import com.example.ecommerce.model.Product;
-import com.example.ecommerce.service.CartService;
-import com.example.ecommerce.service.CategoryService;
+import com.example.ecommerce.service.InventoryService;
 import com.example.ecommerce.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductMenu {
-    private final CartMenu cartMenu;
-    private final CustomerMenu customerMenu;
-
-    private final CartService cartService;
+    private static final Logger logger = LoggerFactory.getLogger(ProductMenu.class);
+    private final InputHelper input;
     private final ProductService productService;
-    private final CategoryService categoryService;
+    private final InventoryService inventoryService;
 
-    private final Scanner scanner = new Scanner(System.in);
-
-
-    public ProductMenu(CartMenu cartMenu, CartService cartService, ProductService productService, CustomerMenu customerMenu, CategoryService categoryService) {
-        this.cartMenu = cartMenu;
-        this.cartService = cartService;
+    public ProductMenu(InputHelper input, ProductService productService, InventoryService inventoryService) {
+        this.input = input;
         this.productService = productService;
-        this.customerMenu = customerMenu;
-        this.categoryService = categoryService;
+        this.inventoryService = inventoryService;
     }
 
-    public void show2(Customer customer) {
+    public void run() {
         boolean running = true;
-
         while (running) {
-            System.out.println("\n=== PRODUKTKATALOG ===");
-            System.out.println("1. Visa alla produkter");
-            System.out.println("2. Visa produkter efter kategori");
-            System.out.println("0. Tillbaka");
-            System.out.print("Val: ");
-
-            List<Product> productsToShow = new ArrayList<>();
-
-            int userInput = Integer.parseInt(scanner.nextLine());
-
-            //Första val
-            switch (userInput) {
-                case 1:
-                    productsToShow = productService.listActiveProducts();
-                    break;
-                case 2:
-                    List<String> categoryNames = categoryService.getAllCategories()
-                            .stream()
-                            .map(Category::getName)
-                            .toList();
-
-                    if (categoryNames.isEmpty()) {
-                        System.out.println("Inga kategorier finns.");
-                        break;
-                    }
-
-                    System.out.println("Tillgängliga kategorier:");
-                    for (int i = 0; i < categoryNames.size(); i++) {
-                        System.out.printf("%d. %s%n", i + 1, categoryNames.get(i));
-                    }
-
-                    System.out.print("Välj kategori (nummer): ");
-                    try {
-                        int catChoice = Integer.parseInt(scanner.nextLine()) - 1;
-                        String selectedCategory = categoryNames.get(catChoice);
-                        productsToShow = filterProductsByCategory(selectedCategory);
-                    } catch (Exception e) {
-                        System.out.println("Ogiltigt kategorival.");
-                    }
-                    break;
-                case 0:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice.");
-            }
-
-            if (productsToShow.isEmpty()) {}
-
-            while (running) {
-                System.out.println("\n=== PRODUKTER ===");
-
-                int index = 1;
-                for (Product p : productsToShow) {
-                    System.out.printf(
-                            "%d. %s - %s kr%n",
-                            index++, p.getName(), p.getPrice()
-                    );
+            try {
+                printMenu();
+                int choice = input.getInt("Välj alternativ: ");
+                switch (choice) {
+                    case 1 -> listProducts();
+                    case 2 -> searchProduct();
+                    case 3 -> addProduct();
+                    case 4 -> disableProduct();
+                    case 5 -> activateProduct();
+                    case 6 -> running = false;
+                    default -> System.out.println("Ogiltigt val, försök igen!");
                 }
-
-                System.out.println("0. Tillbaka");
-                System.out.print("Välj produkt: ");
-
-                String choice = scanner.nextLine();
-
-                //Andra val
-                if ("0".equals(choice)) {
-                    return;
-                }
-
-                try {
-                    int selectedIndex = Integer.parseInt(choice) - 1;
-                    Product selectedProduct = productsToShow.get(selectedIndex);
-
-                    System.out.println("\nVald produkt: " + selectedProduct.getName());
-                    System.out.println("1. Lägg i varukorg");
-                    System.out.println("2. Visa varukorg");
-                    System.out.println("0. Tillbaka");
-                    System.out.print("Val: ");
-
-                    String action = scanner.nextLine();
-
-                    switch (action) {
-                        case "1":
-                            System.out.print("Antal: ");
-                            String qtyInput = scanner.nextLine();
-
-                            try {
-                                int qty = Integer.parseInt(qtyInput);
-
-                                if (qty <= 0) {
-                                    System.out.println("Antal måste vara större än 0");
-                                    return;
-                                }
-
-                                cartService.addProduct(customer, selectedProduct, qty);
-                                System.out.println("Produkten lades i varukorgen!");
-                            } catch (NumberFormatException e) {
-                                System.out.println("Du måste ange ett heltal för antal");
-                            }
-                            break;
-
-                        case "2":
-                            cartMenu.show(customer);
-                            break;
-
-                        case "0":
-                            return;
-
-                        default:
-                            System.out.println("Ogiltigt val");
-                    }
-
-                } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                    System.out.println("Ogiltigt produktval");
-                }
+            } catch (Exception e) {
+                System.out.println("Ett fel uppstod: " + e.getMessage());
+                logger.error("Fel i ProductMenu", e);
             }
         }
     }
 
-    private List<Product> filterProductsByCategory(String categoryName) {
-
-        List<Product> productsList = productService.getProductsByCategory(categoryName);
-
-        if (productsList.isEmpty()) {
-            System.out.println("Inga produkter hittades i kategorin " + categoryName);
-            return new ArrayList<>();
-        }
-
-        return productsList;
+    private void printMenu() {
+        System.out.println("\n=== PRODUKTHANTERING ===");
+        System.out.println("1. Lista alla aktiva produkter");
+        System.out.println("2. Sök produkt (SKU)");
+        System.out.println("3. Lägg till ny produkt");
+        System.out.println("4. Inaktivera produkt");
+        System.out.println("5. Aktivera produkt");
+        System.out.println("6. Tillbaka till huvudmeny");
     }
 
-// ====================================================
-
-    public void show(Customer customer) {
-
+    private void listProducts() {
         List<Product> products = productService.listActiveProducts();
-
         if (products.isEmpty()) {
-            System.out.println("Inga produkter tillgängliga");
+            System.out.println("Inga aktiva produkter hittades.");
+            return;
+        }
+        System.out.println("\n--- PRODUKTER ---");
+        for (Product p : products) {
+            System.out.printf("SKU: %s | Namn: %s | Pris: %s kr%n", p.getSku(), p.getName(), p.getPrice());
+        }
+    }
+
+    private void searchProduct() {
+        String sku = input.getString("Ange SKU: ");
+        Optional<Product> product = productService.getProductBySku(sku);
+        if (product.isPresent()) {
+            System.out.println("Hittad: " + product.get());
+        } else {
+            System.out.println("Ingen produkt med den SKU hittades.");
+        }
+    }
+
+    private void addProduct() {
+        String sku = input.getString("SKU: ");
+        String name = input.getString("Namn: ");
+        String desc = input.getString("Beskrivning: ");
+        double price = input.getDouble("Pris: ");
+        int stock = input.getInt("Initialt lagerantal: ");
+
+        try {
+            Product newProduct = new Product(sku, name, desc, BigDecimal.valueOf(price));
+            Product saved = productService.createProduct(newProduct);
+            inventoryService.createInventory(saved, stock);
+            System.out.println("Produkt skapad!");
+        } catch (Exception e) {
+            System.out.println("Kunde inte skapa produkt: " + e.getMessage());
+        }
+    }
+
+    private void disableProduct() {
+        String sku = input.getString("Ange SKU att inaktivera: ");
+        Optional<Product> product = productService.getProductBySku(sku);
+        if (product.isPresent()) {
+            Product p = product.get();
+            p.setActive(false);
+            productService.updateProduct(p);
+            System.out.println("Produkt inaktiverad.");
+        } else {
+            System.out.println("Produkt hittades inte.");
+        }
+    }
+    private void activateProduct() {
+        List<Product> inactive = productService.listInactiveProducts();
+        if (inactive.isEmpty()) {
+            System.out.println("Det finns inga inaktiva produkter.");
             return;
         }
 
-        boolean running = true;
-
-        while (running) {
-            System.out.println("\n=== PRODUKTER ===");
-
-            int index = 1;
-            for (Product p : products) {
-                System.out.printf(
-                        "%d. %s - %s kr%n",
-                        index++, p.getName(), p.getPrice()
-                );
-            }
-
-            System.out.println("0. Tillbaka");
-            System.out.print("Välj produkt: ");
-
-            String choice = scanner.nextLine();
-
-            if ("0".equals(choice)) {
-                return;
-            }
-
-            try {
-                int selectedIndex = Integer.parseInt(choice) - 1;
-                Product selectedProduct = products.get(selectedIndex);
-
-                System.out.println("\nVald produkt: " + selectedProduct.getName());
-                System.out.println("1. Lägg i varukorg");
-                System.out.println("2. Visa varukorg");
-                System.out.println("0. Tillbaka");
-                System.out.print("Val: ");
-
-                String action = scanner.nextLine();
-
-                switch (action) {
-                    case "1":
-                        System.out.print("Antal: ");
-                        String qtyInput = scanner.nextLine();
-
-                        try {
-                            int qty = Integer.parseInt(qtyInput);
-
-                            if (qty <= 0) {
-                                System.out.println("Antal måste vara större än 0");
-                                return;
-                            }
-
-                            cartService.addProduct(customer, selectedProduct, qty);
-                            System.out.println("Produkten lades i varukorgen!");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Du måste ange ett heltal för antal");
-                        }
-                        break;
-
-                    case "2":
-                        cartMenu.show(customer);
-                        break;
-
-                    case "0":
-                        return;
-
-                    default:
-                        System.out.println("Ogiltigt val");
-                }
-
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                System.out.println("Ogiltigt produktval");
-            }
-
-
+        System.out.println("\n--- INAKTIVA PRODUKTER ---");
+        for (Product p : inactive) {
+            System.out.println(p.getSku() + " - " + p.getName());
         }
 
+        String sku = input.getString("\nAnge SKU att aktivera: ");
+        Optional<Product> product = productService.getProductBySku(sku);
+
+        if (product.isPresent()) {
+            Product p = product.get();
+            if (p.isActive()) {
+                System.out.println("Produkten är redan aktiv.");
+                return;
+            }
+            p.setActive(true);
+            productService.updateProduct(p);
+            System.out.println("Produkt aktiverad!");
+        } else {
+            System.out.println("Produkt hittades inte.");
+        }
     }
 }

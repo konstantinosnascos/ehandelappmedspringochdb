@@ -21,6 +21,18 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
     @Column(precision = 10, scale = 2)
     private BigDecimal total;
 

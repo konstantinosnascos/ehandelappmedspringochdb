@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.model.Inventory;
+import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.InventoryRepository;
 import com.example.ecommerce.exception.InsufficientStockException;
 import com.example.ecommerce.exception.ProductNotFoundException;
@@ -58,6 +59,20 @@ public class InventoryService {
                 .orElseThrow(() -> new ProductNotFoundException("Produkt " + productId + " finns inte"));
         inventory.increaseStock(amount);
         inventoryRepository.save(inventory);
+    }
+
+    public void createInventory(Product product, int initialStock) {
+        Inventory inventory = new Inventory(product, initialStock);
+        inventoryRepository.save(inventory);
+    }
+
+    public void addStock(Product product, int amount) {
+        // Om inventory finns, öka. Annars skapa.
+        inventoryRepository.findById(product.getId())
+                .ifPresentOrElse(
+                        inv -> { inv.increaseStock(amount); inventoryRepository.save(inv); },
+                        () -> createInventory(product, amount)
+                );
     }
 }
 //Lagerhantering

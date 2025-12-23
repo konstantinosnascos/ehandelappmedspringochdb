@@ -65,6 +65,19 @@ public class CartService {
         cartRepository.delete(cart);
     }
 
+    public void removeProduct(Customer customer, String sku) {
+        Cart cart = getCartWithItems(customer);
+
+        CartItem itemToRemove = cart.getItems().stream()
+                .filter(item -> item.getProduct().getSku().equalsIgnoreCase(sku))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Produkten finns inte i varukorgen."));
+
+        cart.getItems().remove(itemToRemove);
+
+        cartRepository.save(cart);
+    }
+
     @Transactional(readOnly = true)
     public Cart getCartWithItems(Customer customer) {
         Cart cart = cartRepository.findByCustomer(customer).orElseThrow(() -> new RuntimeException("Ingen varukorg hittades"));

@@ -1,5 +1,6 @@
 package com.example.ecommerce.repository;
 
+import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     """, nativeQuery = true)
     List<Object[]> findTopSellingProducts(@Param("limit") int limit);
 
+    List<Order> findByCustomer(Customer customer);
 
     @Query("SELECT COALESCE(SUM(o.total), 0) FROM Order o WHERE o.status = 'PAID' AND o.createdAt BETWEEN :start AND :end")
     BigDecimal calculateRevenueBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);

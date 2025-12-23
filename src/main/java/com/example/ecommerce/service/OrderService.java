@@ -2,10 +2,17 @@ package com.example.ecommerce.service;
 
 import com.example.ecommerce.exception.OrderNotFoundException;
 import com.example.ecommerce.model.*;
+
 import com.example.ecommerce.model.Order;
 import com.example.ecommerce.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
 
@@ -46,6 +53,15 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public List<Order> getCustomerOrders(Customer customer) {
+        return orderRepository.findByCustomer(customer);
+    }
+
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order " + id + " hittades inte"));
+    }
+
     @Transactional
     public void markAsPaid(Long orderId) {
         Order order = orderRepository.findById(orderId)
@@ -61,14 +77,47 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
+
+    public Map<Product, Long> getTopProducts(int limit) {
+        List<Object[]> results = orderRepository.findTopSellingProducts(limit);
+
+        return null;
+    }
+
+    public List<Object[]> getTopSellingProducts(int limit) {
+        return orderRepository.findTopSellingProducts(limit);
+    }
+
+    public BigDecimal getTotalRevenue(LocalDate start, LocalDate end) {
+        return orderRepository.calculateRevenueBetween(start.atStartOfDay(), end.atTime(23, 59, 59));
+    }
+
+    public List<Order> getOrdersByDateRange(LocalDate start, LocalDate end) {
+
+        return orderRepository.findAll().stream()
+                .filter(o -> o.getStatus() == OrderStatus.PAID)
+                .filter(o -> !o.getCreatedAt().toLocalDate().isBefore(start) && !o.getCreatedAt().toLocalDate().isAfter(end))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void saveImportedOrder(Order order) {
+        if (order.getItems() != null) {
+            for (OrderItem item : order.getItems()) {
+                item.setOrder(order);
+            }
+        }
+        orderRepository.save(order);
+    }
 }
 
 
 
-    //Hämta alla ordrar
-    //    Hämta order med id
-    //    Hämta ordrar för kund
-    //    Hämta ordrar med viss status
-    //    Skapa order
-    //    Avbryt order
-    //    Sätt status PAID
+
+//Hämta alla ordrar
+//    Hämta order med id
+//    Hämta ordrar för kund
+//    Hämta ordrar med viss status
+//    Skapa order
+//    Avbryt order
+//    Sätt status PAID
