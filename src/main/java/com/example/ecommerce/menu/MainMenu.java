@@ -32,6 +32,7 @@ public class MainMenu {
             System.out.println("\n=== E-HANDEL ===");
             System.out.println("1. Visa produkter");
             System.out.println("2. Visa varukorg");
+            System.out.println("3. Kundhantering");
             System.out.println("0. Avsluta");
             System.out.print("Ditt val (0-1): ");
 
@@ -47,6 +48,9 @@ public class MainMenu {
                     cartMenu.show(activeCustomer);
                     break;
 
+                case "3":
+                    customerMenu.show();
+                    break;
 
                 case "0":
                     System.out.println("Hej då!");
