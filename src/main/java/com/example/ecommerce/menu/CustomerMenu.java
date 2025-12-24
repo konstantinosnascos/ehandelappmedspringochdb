@@ -16,19 +16,27 @@ public class CustomerMenu {
     }
 
     public Customer createCustomer() {
+        while(true){
+            try {
 
-        System.out.println("\n=== KUNDUPPGIFTER ===");
+                System.out.println("\n=== KUNDUPPGIFTER FÖR ATT LÄGGA TILL I VARUKORGEN ===");
 
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
+                System.out.print("Email: ");
+                String email = scanner.nextLine();
 
-        System.out.print("Namn: ");
-        String name = scanner.nextLine();
+                System.out.print("Namn: ");
+                String name = scanner.nextLine();
 
-        Customer customer = customerService.createCustomer(email, name);
+                Customer customer = customerService.createCustomer(email, name);
 
-        System.out.println("Kund registrerad!");
-        return customer;
+                System.out.println("Kund registrerad!");
+                return customer;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Fel: " + e.getMessage());
+                System.out.println("Försök igen");
+            }
+        }
+
     }
 }
 

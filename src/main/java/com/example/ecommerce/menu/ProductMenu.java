@@ -20,14 +20,14 @@ public class ProductMenu {
     private final CategoryService categoryService;
     private final InventoryService inventoryService;
 
+
     private final Scanner scanner = new Scanner(System.in);
 
-
-    public ProductMenu(CartMenu cartMenu, CartService cartService, ProductService productService, CustomerMenu customerMenu, CategoryService categoryService, InventoryService inventoryService) {
+    public ProductMenu(CartMenu cartMenu, CustomerMenu customerMenu, CartService cartService, ProductService productService, CategoryService categoryService, InventoryService inventoryService, CustomerMenu customerMenu1) {
         this.cartMenu = cartMenu;
+        this.customerMenu = customerMenu;
         this.cartService = cartService;
         this.productService = productService;
-        this.customerMenu = customerMenu;
         this.categoryService = categoryService;
         this.inventoryService = inventoryService;
     }
@@ -83,9 +83,9 @@ public class ProductMenu {
                     System.out.println("Invalid choice.");
             }
 
-            if (productsToShow.isEmpty()) {}
+            boolean browsingProducts = true;
 
-            while (running) {
+            while (browsingProducts) {
                 System.out.println("\n=== PRODUKTER ===");
 
 
@@ -141,17 +141,22 @@ public class ProductMenu {
                                     return;
                                 }
 
+                                if(customer == null) {
+                                    customer = customerMenu.createCustomer();
+                                }
                                 cartService.addProduct(customer, selectedProduct, qty);
                                 System.out.println("Produkten lades i varukorgen!");
                             } catch (NumberFormatException e) {
                                 System.out.println("Du måste ange ett heltal för antal");
                             }
                             break;
-
                         case "2":
+                            if(customer == null)
+                            {
+                                customer = customerMenu.createCustomer();
+                            }
                             cartMenu.show(customer);
                             break;
-
                         case "0":
                             return;
 
