@@ -26,9 +26,8 @@ public class CheckoutMenu {
         this.paymentService = paymentService;
     }
 
-    public void checkout(Customer customer) {
+    public void checkout(Cart cart) {
 
-        Cart cart = cartService.getOrCreateCart(customer);
 
         if (cart.getItems().isEmpty()) {
             System.out.println("Varukorgen är tom.");
