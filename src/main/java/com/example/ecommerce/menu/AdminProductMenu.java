@@ -61,7 +61,7 @@ public class AdminProductMenu {
         System.out.print("Startlager: ");
         int stock = Integer.parseInt(scanner.nextLine());
 
-        adminProductService.createProduct(sku, name, description, price, stock);
+        adminProductService.addProduct(sku, name, description, price, stock);
 
         System.out.println("✔ Produkten skapades!");
     }
