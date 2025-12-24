@@ -32,27 +32,32 @@ public class CartService {
         return cartRepository.findByCustomerWithItems(customer).orElse(null);
     }
 
-    public void addProduct(Customer customer, Product product, int qty)
-    {
-        if (!inventoryService.hasStock(product.getId(), qty)) {
-            throw new InsufficientStockException(
-                    "Otillräckligt lager för " + product.getName()
-            );
-        }
+    public void addProduct(Customer customer, Product product, int qty) {
+
         Cart cart = getOrCreateCart(customer);
 
         Optional<CartItem> existing = cart.getItems().stream()
-                .filter(ci -> ci.getProduct().equals(product))
+                .filter(ci -> ci.getProduct().getId().equals(product.getId()))
                 .findFirst();
 
-        if(existing.isPresent())
-        {
-            int newQty = existing.get().getQty() + qty;
-            if (!inventoryService.hasStock(product.getId(), newQty)) {
-                throw new InsufficientStockException("Otillräckligt lager");
+        if (existing.isPresent()) {
+            int newTotalQty = existing.get().getQty() + qty;
+
+            if (!inventoryService.hasStock(product.getId(), newTotalQty)) {
+                throw new InsufficientStockException(
+                        "Otillräckligt lager för " + product.getName()
+                );
             }
-            existing.get().setQty(newQty);
+
+            existing.get().setQty(newTotalQty);
+
         } else {
+
+            if (!inventoryService.hasStock(product.getId(), qty)) {
+                throw new InsufficientStockException(
+                        "Otillräckligt lager för " + product.getName()
+                );
+            }
             CartItem item = new CartItem();
             item.setCart(cart);
             item.setProduct(product);
@@ -61,21 +66,19 @@ public class CartService {
         }
 
         cartRepository.save(cart);
-
     }
 
-    public void clearCart(Cart cart)
-    {
+    public void clearCart(Cart cart) {
         cartRepository.delete(cart);
     }
+
     @Transactional(readOnly = true)
     public Cart getCartWithItems(Customer customer)
     {
        Cart cart = cartRepository.findByCustomerWithItems(customer).orElseThrow(()-> new RuntimeException("Ingen varukorg hittades"));
 
-       cart.getItems().size();
-       return cart;
+        cart.getItems().size();
+        return cart;
     }
-
-
 }
+
