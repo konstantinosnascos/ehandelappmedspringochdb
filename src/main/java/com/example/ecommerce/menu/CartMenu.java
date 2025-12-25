@@ -10,10 +10,13 @@ import java.util.*;
 @Component
 public class CartMenu {
     private final CartService cartService;
+    private final CheckoutMenu checkoutMenu;
     private final Scanner scanner = new Scanner(System.in);
 
-    public CartMenu(CartService cartService) {
+
+    public CartMenu(CartService cartService, CheckoutMenu checkoutMenu) {
         this.cartService = cartService;
+        this.checkoutMenu = checkoutMenu;
     }
 
     public void show(Customer customer) {
@@ -62,7 +65,7 @@ public class CartMenu {
 
         if("1".equals(choice))
         {
-            System.out.println("Checkout kommer här (nästa steg)");
+         checkoutMenu.checkout(cart);
         }
     }
 }

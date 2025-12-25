@@ -22,9 +22,16 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     boolean existsBySku(String sku);
 
     List<Product> findByActive(boolean active);
+    // OBS: Vi JOIN:ar på i.product (JPA-relationen) och inte på i.productId.
+   // Inventory använder @OneToOne + @MapsId, vilket betyder att productId är en kolumn,
+   // men JPA-relationen heter "product". Därför måste JOIN göras via i.product = p.
+  // Detta är den korrekta JPQL-syntaxen för vår Inventory-modell.
 
-    @Query("SELECT p FROM Product p JOIN Inventory i ON p.id = i.productId WHERE i.inStock < :threshold")
+    @Query( "SELECT p FROM Product p JOIN Inventory i ON i.product = p WHERE i.inStock < :threshold ")
     List<Product> findProductsWithLowStock(@Param("threshold") int threshold);
+
+   // @Query("SELECT p FROM Product p JOIN Inventory i ON p.id = i.productId WHERE i.inStock < :threshold")
+   // List<Product> findProductsWithLowStock(@Param("threshold") int threshold);
 
     // findAll(), findById(), save(), delete() finns redan från JpaRepository och behöver inte skapas
 

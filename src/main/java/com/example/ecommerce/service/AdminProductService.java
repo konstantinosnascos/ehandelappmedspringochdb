@@ -23,7 +23,7 @@ public class AdminProductService {
         this.inventoryRepository = inventoryRepository;
     }
 
-    public Product createProduct(String sku, String name, String description,
+    public void addProduct(String sku, String name, String description,
                                  BigDecimal price, int initialStock) {
 
         Product product = new Product(sku, name, description, price);
@@ -32,7 +32,6 @@ public class AdminProductService {
         Inventory inventory = new Inventory(savedProduct, initialStock);
         inventoryRepository.save(inventory);
 
-        return savedProduct;
     }
 
     public void deactivateProduct(Long productId) {
@@ -58,4 +57,23 @@ public class AdminProductService {
         inventory.setInStock(newStock);
         inventoryRepository.save(inventory);
     }
+    public void updateProduct(Long productId, String name, String description, BigDecimal price) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Produkt hittades inte"));
+
+        if (name != null && !name.isBlank()) {
+            product.setName(name);
+        }
+
+        if (description != null && !description.isBlank()) {
+            product.setDescription(description);
+        }
+
+        if (price != null) {
+            product.setPrice(price);
+        }
+
+        productRepository.save(product);
+    }
+
 }
