@@ -78,6 +78,7 @@ public class Product {
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
 
+    public Set<Category> getCategories() { return categories; }
 
     public void setPrice(double price) {
         this.price = BigDecimal.valueOf(price);
