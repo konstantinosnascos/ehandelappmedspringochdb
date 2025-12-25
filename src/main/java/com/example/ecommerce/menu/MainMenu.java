@@ -53,7 +53,6 @@ public class MainMenu {
 
             switch (choice) {
                 case "1":
-                    ensureCustomerExists();
                     productMenu.show(activeCustomer);
                     break;
 

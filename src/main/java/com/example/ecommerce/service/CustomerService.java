@@ -20,11 +20,22 @@ public class CustomerService {
             throw new IllegalArgumentException("Email får inte vara tom");
         }
 
+        if(!email.contains("@") || !email.contains(".")){
+            throw new IllegalArgumentException("Ogiltigt email-format");
+        }
+
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Namn får inte vara tomt");
         }
 
-        // om kund redan finns → returnera den
+        if(name.length() < 2){
+            throw new IllegalArgumentException("Namn måste vara minst 2 tecken");
+        }
+
+        if(!name.matches("[a-zA-ZåäöÅÄÖ ]+")) {
+            throw new IllegalArgumentException("Namn får endast innehålla bokstäver");
+        }
+
         return customerRepository
                 .findByEmail(email)
                 .orElseGet(() -> {
