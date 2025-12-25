@@ -1,0 +1,11 @@
+sku,name,description,price,categories
+SKU001,Mus,USB Mus,199.00,Elektronik
+SKU002,Skrivbord,Mekaniskt Skrivbord,899.00,Elektronik
+SKU003,Mug,Kaffe Mug,99.00,Hem
+SKU004,Java Bok,Learn Java,299.00,Böcker
+SKU005,T-Shirt,Bomull T-Shirt,199.00,Kläder
+SKU006,Hörlurar,Trädlösa Hörlurar,1299.00,Elektronik
+SKU007,Lampa,Bords Lampa,349.00,Hem
+SKU008,Skissbok,Färgade Sidor,49.00,Böcker
+SKU009,Jacka,Vinter Jacka,1499.00,Kläder
+SKU010,Skärm,24-tums Skärm,2499.00,Elektronik
