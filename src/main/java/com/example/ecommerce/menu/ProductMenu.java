@@ -39,6 +39,7 @@ public class ProductMenu {
             System.out.println("\n=== PRODUKTKATALOG ===");
             System.out.println("1. Visa alla produkter");
             System.out.println("2. Visa produkter efter kategori");
+            System.out.println("3. Visa produkter efter namn");
             System.out.println("0. Tillbaka");
             System.out.print("Val: ");
 
@@ -76,6 +77,18 @@ public class ProductMenu {
                         System.out.println("Ogiltigt kategorival.");
                     }
                     break;
+
+                case 3:
+                    System.out.print("Sök produktnamn: ");
+                    String keyword = scanner.nextLine();
+
+                    productsToShow = productService.searchProductsByName(keyword);
+
+                    if (productsToShow.isEmpty()) {
+                        System.out.println("Inga produkter hittades.");
+                    }
+                    break;
+
                 case 0:
                     running = false;
                     break;
