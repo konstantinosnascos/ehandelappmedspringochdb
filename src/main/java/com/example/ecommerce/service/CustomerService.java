@@ -3,6 +3,9 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class CustomerService {
@@ -43,4 +46,13 @@ public class CustomerService {
                     return customerRepository.save(customer);
                 });
     }
+
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    public Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
 }
