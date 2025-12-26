@@ -52,6 +52,7 @@ public class ProductMenu {
                 case 1:
                     productsToShow = productService.listActiveProducts();
                     break;
+
                 case 2:
                     List<String> categoryNames = categoryService.getAllCategories()
                             .stream()
@@ -71,10 +72,11 @@ public class ProductMenu {
                     System.out.print("Välj kategori (nummer): ");
                     try {
                         int catChoice = Integer.parseInt(scanner.nextLine()) - 1;
-                        String selectedCategory = categoryNames.get(catChoice);
+                        String selectedCategory = categoryNames.get(catChoice).trim();
                         productsToShow = filterProductsByCategory(selectedCategory);
                     } catch (Exception e) {
-                        System.out.println("Ogiltigt kategorival.");
+                        System.out.println("Ogiltigt kategorival." + e.getMessage());
+                        return;
                     }
                     break;
 
@@ -192,6 +194,8 @@ public class ProductMenu {
             System.out.println("Inga produkter hittades i kategorin " + categoryName);
             return new ArrayList<>();
         }
+
+        System.out.println("Hittade: " + productsList.size() + " Produkter i kategorin");
 
         return productsList;
     }
