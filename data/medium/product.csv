@@ -1,1 +1,51 @@
 sku,name,description,price,categories
+SKU001,Smarttelefon A,Android-smarttelefon,4999.00,Elektronik
+SKU002,Smarttelefon B,iOS-smarttelefon,6999.00,Elektronik
+SKU003,Bärbar dator Bas,Bärbar dator 8GB RAM,7999.00,Elektronik
+SKU004,Bärbar dator Pro,Bärbar dator 16GB RAM,11999.00,Elektronik
+SKU005,Hörlurar,Brusreducerande hörlurar,1999.00,Elektronik
+SKU006,Fantasybok,Fantasyroman,299.00,Böcker
+SKU007,Vetenskapsbok,Populärvetenskaplig bok,349.00,Böcker
+SKU008,Kokbok,Samling av recept,399.00,Böcker
+SKU009,Historiebok,Världshistoria,279.00,Böcker
+SKU010,Barnbok,Bok för barn,199.00,Böcker
+SKU011,T-shirt Vit,T-shirt i bomull,199.00,Kläder
+SKU012,T-shirt Svart,T-shirt i bomull,199.00,Kläder
+SKU013,Jeans Blå,Denimjeans,599.00,Kläder
+SKU014,Huvtröja Grå,Huvtröja med luva,499.00,Kläder
+SKU015,Lätt Jacka,Vårjacka,899.00,Kläder
+SKU016,Soffkudde,Dekorativ kudde,249.00,Hem
+SKU017,Bordslampa,LED-lampa,399.00,Hem
+SKU018,Kaffebryggare,Kaffemaskin,1499.00,Hem
+SKU019,Dammsugare,Dammsugare för hemmet,1799.00,Hem
+SKU020,Kökskniv,Rostfri kniv,299.00,Hem
+SKU021,Fotboll,Fotboll i standardstorlek,299.00,Sport
+SKU022,Basketboll,Basketboll,349.00,Sport
+SKU023,Tennisracket,Lätt tennisracket,899.00,Sport
+SKU024,Yogamatta,Halkfri yogamatta,399.00,Sport
+SKU025,Hantelset,Set med hantlar,999.00,Sport
+SKU026,Leksaksbil,Bil för barn,149.00,Leksaker
+SKU027,Byggklossar,Kreativa byggklossar,299.00,Leksaker
+SKU028,Docka,Klassisk docka,249.00,Leksaker
+SKU029,Sällskapsspel,Spel för hela familjen,399.00,Leksaker
+SKU030,Pussel 1000,1000-bitars pussel,199.00,Leksaker
+SKU031,Smartklocka,Träningsklocka,1999.00,Elektronik
+SKU032,Bluetooth-högtalare,Bärbar högtalare,1499.00,Elektronik
+SKU033,E-boksläsare,Digital bokläsare,1299.00,Elektronik
+SKU034,Anteckningsbok A5,Liten anteckningsbok,99.00,Böcker
+SKU035,Anteckningsbok A4,Stor anteckningsbok,129.00,Böcker
+SKU036,Strumpor 5-pack,Strumpor i flerpack,149.00,Kläder
+SKU037,Sportkeps,Keps för träning,199.00,Kläder
+SKU038,Väggklocka,Modern väggklocka,349.00,Hem
+SKU039,Golvlampa,Stående lampa,899.00,Hem
+SKU040,Vattenflaska,Flaska i stål,249.00,Sport
+SKU041,Träningsband,Gummiband för träning,299.00,Sport
+SKU042,Actionfigur,Superhjältefigur,349.00,Leksaker
+SKU043,Fjärrstyrd bil,RC-bil,499.00,Leksaker
+SKU044,Surfplatta 10 tum,10-tums surfplatta,3999.00,Elektronik
+SKU045,Skärm 24 tum,24-tums datorskärm,2499.00,Elektronik
+SKU046,Trådlös mus,Mus utan sladd,399.00,Elektronik
+SKU047,Mekaniskt tangentbord,Tangentbord med mekaniska brytare,1299.00,Elektronik
+SKU048,Skrivbordsorganisatör,Organisatör för kontor,199.00,Hem
+SKU049,Filt Mjuk,Mjuk filt,499.00,Hem
+SKU050,Nallebjörn,Mjuk leksaksbjörn,299.00,Leksaker
