@@ -54,52 +54,31 @@ public class ProductMenu {
                     break;
 
                 case 2:
-                    List<Category> categories = categoryService.getAllCategories();
+                    List<String> categoryNames = categoryService.getAllCategories()
+                            .stream()
+                            .map(Category::getName)
+                            .toList();
 
-                    if (categories.isEmpty()) {
+                    if (categoryNames.isEmpty()) {
                         System.out.println("Inga kategorier finns.");
                         break;
                     }
 
-                    boolean choosingCategory = true;
+                    System.out.println("Tillgängliga kategorier:");
+                    for (int i = 0; i < categoryNames.size(); i++) {
+                        System.out.printf("%d. %s%n", i + 1, categoryNames.get(i));
+                    }
 
-                    while (choosingCategory) {
-                        System.out.println("Tillgängliga kategorier:");
-                        System.out.println("0. Tillbaka");
-
-                        for (int i = 0; i < categories.size(); i++) {
-                            System.out.printf("%d. %s%n", i + 1, categories.get(i).getName());
-                        }
-
-                        System.out.print("Välj kategori (nummer): ");
-                        String input = scanner.nextLine();
-
-                        // Tillbaka till produktkatalog
-                        if ("0".equals(input)) {
-                            choosingCategory = false;
-                            break;
-                        }
-
-                        // Måste vara siffra
-                        if (!input.matches("\\d+")) {
-                            System.out.println("Du måste ange en siffra.");
-                            continue;
-                        }
-
-                        int catChoice = Integer.parseInt(input) - 1;
-
-                        if (catChoice < 0 || catChoice >= categories.size()) {
-                            System.out.println("Ogiltigt kategorival.");
-                            continue;
-                        }
-
-                        String selectedCategory = categories.get(catChoice).getName();
+                    System.out.print("Välj kategori (nummer): ");
+                    try {
+                        int catChoice = Integer.parseInt(scanner.nextLine()) - 1;
+                        String selectedCategory = categoryNames.get(catChoice).trim();
                         productsToShow = filterProductsByCategory(selectedCategory);
-                        choosingCategory = false;
+                    } catch (Exception e) {
+                        System.out.println("Ogiltigt kategorival." + e.getMessage());
+                        return;
                     }
                     break;
-
-
 
                 case 3:
                     System.out.print("Sök produktnamn: ");
