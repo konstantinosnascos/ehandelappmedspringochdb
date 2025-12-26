@@ -52,25 +52,51 @@ public class CustomerMenu {
         while(true){
             try {
 
-                System.out.println("\n=== KUNDUPPGIFTER FÖR ATT LÄGGA TILL I VARUKORGEN ===");
+        while (true) {
+            System.out.println("\n=== KUNDUPPGIFTER ===");
 
-                System.out.print("Email: ");
-                String email = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine().trim();
 
-                System.out.print("Namn: ");
-                String name = scanner.nextLine();
+            System.out.print("Namn: ");
+            String name = scanner.nextLine().trim();
 
+            // 1. Båda tomma
+            if (email.isEmpty() && name.isEmpty()) {
+                System.out.println("Du måste fylla i din email adress och ditt namn, försök igen!");
+                continue;
+            }
+
+            // 2. Email tom
+            if (email.isEmpty()) {
+                System.out.println("Du måste fylla i din email adress, försök igen!");
+                continue;
+            }
+
+            // 3. Namn tomt
+            if (name.isEmpty()) {
+                System.out.println("Du måste fylla i ditt namn, försök igen!");
+                continue;
+            }
+
+            // 4. Felaktigt email-format
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.(com|se|net)$")) {
+                System.out.println("Din email adress är inte skriven i rätt format.");
+                continue;
+            }
+
+            // 5. Allt korrekt → försök skapa kund
+            try {
                 Customer customer = customerService.createCustomer(email, name);
-
                 System.out.println("Kund registrerad!");
                 return customer;
             } catch (IllegalArgumentException e) {
-                System.out.println("Fel: " + e.getMessage());
-                System.out.println("Försök igen");
+                System.out.println(e.getMessage());
+                System.out.println("Försök igen.");
             }
         }
-
     }
+
 
     private void listCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
