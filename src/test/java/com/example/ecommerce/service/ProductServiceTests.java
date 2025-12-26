@@ -66,7 +66,7 @@ class ProductServiceTests {
 
     @Test
     void shouldGetProductsByCategory() {
-        when(productRepository.findByCategoriesNameIgnoreCase("Elektronik"))
+        when(productRepository.findByNameContainingIgnoreCase("Elektronik"))
                 .thenReturn(Arrays.asList(product1));
 
         List<Product> result = productService.getProductsByCategory("Elektronik");

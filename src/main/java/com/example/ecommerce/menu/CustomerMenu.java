@@ -49,6 +49,8 @@ public class CustomerMenu {
 
 
     public Customer createCustomer() {
+        while(true){
+            try {
 
         while (true) {
             System.out.println("\n=== KUNDUPPGIFTER ===");

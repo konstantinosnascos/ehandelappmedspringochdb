@@ -3,6 +3,7 @@ package com.example.ecommerce.menu;
 import com.example.ecommerce.model.Customer;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -13,8 +14,9 @@ public class MainMenu {
     private final CustomerMenu customerMenu;
     private final ProductMenu productMenu;
     private final CartMenu cartMenu;
-    private final AdminProductMenu adminProductMenu; // <-- NYTT
+    private final AdminProductMenu adminProductMenu;
     private final ReportMenu reportMenu;
+    private final LoadScenarioMenu loadScenarioMenu;
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -22,13 +24,14 @@ public class MainMenu {
                     ProductMenu productMenu,
                     CartMenu cartMenu,
                     AdminProductMenu adminProductMenu,
-                    ReportMenu reportMenu) { // <-- NYTT
+                    ReportMenu reportMenu, LoadScenarioMenu loadScenarioMenu) {
 
         this.customerMenu = customerMenu;
         this.productMenu = productMenu;
         this.cartMenu = cartMenu;
         this.adminProductMenu = adminProductMenu;
-        this.reportMenu = reportMenu; // <-- NYTT
+        this.reportMenu = reportMenu;
+        this.loadScenarioMenu = loadScenarioMenu;
     }
 
     private void ensureCustomerExists() {
@@ -37,7 +40,7 @@ public class MainMenu {
         }
     }
 
-    public void show() {
+    public void show() throws IOException {
         boolean running = true;
 
         while (running) {
@@ -45,8 +48,9 @@ public class MainMenu {
             System.out.println("1. Visa produkter");
             System.out.println("2. Visa varukorg");
             System.out.println("3. Kundhantering");
-            System.out.println("4. Produktadministration"); // <-- NYTT
-            System.out.println("5. Rapporter");// <-- NYTT
+            System.out.println("4. Produktadministration");
+            System.out.println("5. Rapporter");
+            System.out.println("6. Ladda Scenario");
             System.out.println("0. Avsluta");
             System.out.print("Ditt val: ");
 
@@ -54,7 +58,6 @@ public class MainMenu {
 
             switch (choice) {
                 case "1":
-                    ensureCustomerExists();
                     productMenu.show(activeCustomer);
                     break;
 
@@ -68,11 +71,15 @@ public class MainMenu {
                     break;
 
                 case "4":
-                    adminProductMenu.show(); // <-- NYTT
+                    adminProductMenu.show();
                     break;
 
                 case "5":
-                    reportMenu.show(); // <-- NYTT
+                    reportMenu.show();
+                    break;
+
+                case "6":
+                    loadScenarioMenu.show(scanner);
                     break;
 
                 case "0":
