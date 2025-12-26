@@ -48,7 +48,7 @@ class CartServiceTests {
 
     @Test
     void shouldCreateNewCartWhenNotExists() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.empty());
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.empty());
         when(cartRepository.save(any(Cart.class))).thenAnswer(i -> i.getArguments()[0]);
 
         Cart result = cartService.getOrCreateCart(customer);
@@ -60,7 +60,7 @@ class CartServiceTests {
 
     @Test
     void shouldReturnExistingCart() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.of(cart));
 
         Cart result = cartService.getOrCreateCart(customer);
 
@@ -70,7 +70,7 @@ class CartServiceTests {
 
     @Test
     void shouldAddProductToCartWhenStockAvailable() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.of(cart));
         when(inventoryService.hasStock(1L, 2)).thenReturn(true);
         when(cartRepository.save(any(Cart.class))).thenAnswer(i -> i.getArguments()[0]);
 
@@ -83,14 +83,14 @@ class CartServiceTests {
 
     @Test
     void shouldThrowExceptionWhenInsufficientStock() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.of(cart));
         when(inventoryService.hasStock(1L, 100)).thenReturn(false);
 
         assertThatThrownBy(() -> cartService.addProduct(customer, product, 100))
                 .isInstanceOf(InsufficientStockException.class)
                 .hasMessageContaining("Otillräckligt lager");
 
-        verify(cartRepository).findByCustomer(customer);
+        verify(cartRepository).findByCustomerWithItems(customer);
         verify(cartRepository, never()).save(any(Cart.class));
     }
 
@@ -103,7 +103,7 @@ class CartServiceTests {
         existingItem.setQty(2);
         cart.getItems().add(existingItem);
 
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.of(cart));
 
         when(inventoryService.hasStock(1L, 5)).thenReturn(true);
 
@@ -126,17 +126,17 @@ class CartServiceTests {
 
     @Test
     void shouldGetCartWithItems() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.of(cart));
 
         Cart result = cartService.getCartWithItems(customer);
 
         assertThat(result).isEqualTo(cart);
-        verify(cartRepository).findByCustomer(customer);
+        verify(cartRepository).findByCustomerWithItems(customer);
     }
 
     @Test
     void shouldThrowExceptionWhenCartNotFound() {
-        when(cartRepository.findByCustomer(customer)).thenReturn(Optional.empty());
+        when(cartRepository.findByCustomerWithItems(customer)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> cartService.getCartWithItems(customer))
                 .isInstanceOf(RuntimeException.class)
