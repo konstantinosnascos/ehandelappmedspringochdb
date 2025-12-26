@@ -26,6 +26,11 @@ public class AdminProductService {
     public void addProduct(String sku, String name, String description,
                                  BigDecimal price, int initialStock) {
 
+        if (productRepository.existsBySku(sku))
+        {
+            throw new IllegalArgumentException("Produkt med SKU " + sku + " finns redan");
+        }
+
         Product product = new Product(sku, name, description, price);
         Product savedProduct = productRepository.save(product);
 

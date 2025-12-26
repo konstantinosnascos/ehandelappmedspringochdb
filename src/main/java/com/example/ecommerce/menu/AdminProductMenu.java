@@ -44,26 +44,37 @@ public class AdminProductMenu {
     }
 
     private void addProduct() {
-        System.out.println("\n=== LÄGG TILL PRODUKT ===");
+        try
+        {
+            System.out.println("\n=== LÄGG TILL PRODUKT ===");
 
-        System.out.print("SKU: ");
-        String sku = scanner.nextLine();
+            System.out.print("SKU: ");
+            String sku = scanner.nextLine();
 
-        System.out.print("Namn: ");
-        String name = scanner.nextLine();
+            System.out.print("Namn: ");
+            String name = scanner.nextLine();
 
-        System.out.print("Beskrivning: ");
-        String description = scanner.nextLine();
+            System.out.print("Beskrivning: ");
+            String description = scanner.nextLine();
 
-        System.out.print("Pris: ");
-        BigDecimal price = new BigDecimal(scanner.nextLine());
+            System.out.print("Pris: ");
+            BigDecimal price = new BigDecimal(scanner.nextLine());
 
-        System.out.print("Startlager: ");
-        int stock = Integer.parseInt(scanner.nextLine());
+            System.out.print("Startlager: ");
+            int stock = Integer.parseInt(scanner.nextLine());
 
-        adminProductService.addProduct(sku, name, description, price, stock);
+            adminProductService.addProduct(sku, name, description, price, stock);
 
-        System.out.println("✔ Produkten skapades!");
+            System.out.println("✔ Produkten skapades!");
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("Error:" + e.getMessage());
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error" + e.getMessage());
+        }
     }
 
     private void updateProduct() {
