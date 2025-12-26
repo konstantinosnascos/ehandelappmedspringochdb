@@ -1,6 +1,7 @@
 package com.example.ecommerce.menu;
 
 import com.example.ecommerce.service.CSVReaderService;
+import com.example.ecommerce.service.DataGeneratorService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,10 +12,12 @@ import java.util.Scanner;
 public class LoadScenarioMenu
 {
     private final CSVReaderService csvReaderService;
+    private final DataGeneratorService dataGeneratorService;
 
-    LoadScenarioMenu(CSVReaderService csvReaderService)
+    LoadScenarioMenu(CSVReaderService csvReaderService, DataGeneratorService dataGeneratorService)
     {
         this.csvReaderService = csvReaderService;
+        this.dataGeneratorService = dataGeneratorService;
     }
 
     public void show(Scanner userInput) throws IOException {
@@ -73,6 +76,8 @@ public class LoadScenarioMenu
         csvReaderService.products(pathProductsMedium);
         csvReaderService.customers(pathCustomersMedium);
         csvReaderService.categories(pathCategoriesMedium);
+
+        dataGeneratorService.generateOrders(50);
     }
 
     private void loadLargeScenario() throws IOException
@@ -84,5 +89,7 @@ public class LoadScenarioMenu
         csvReaderService.products(pathProductsLarge);
         csvReaderService.customers(pathCustomersLarge);
         csvReaderService.categories(pathCategoriesLarge);
+
+        dataGeneratorService.generateOrders(2000);
     }
 }
