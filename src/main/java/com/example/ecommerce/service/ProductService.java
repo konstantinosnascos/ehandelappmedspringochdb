@@ -20,8 +20,7 @@ public class ProductService {
     }
 
     public List<Product> getProductsByCategory(String categoryName) {
-        return productRepository
-                .findByCategoriesNameIgnoreCase(categoryName)
+        return productRepository.findByCategoryName(categoryName)
                 .stream()
                 .filter(Product::isActive)
                 .toList();
