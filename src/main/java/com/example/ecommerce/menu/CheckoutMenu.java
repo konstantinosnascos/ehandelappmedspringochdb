@@ -1,5 +1,7 @@
 package com.example.ecommerce.menu;
 
+import com.example.ecommerce.exception.InsufficientStockException;
+import com.example.ecommerce.exception.ProductNotFoundException;
 import com.example.ecommerce.model.*;
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.service.CartService;
@@ -28,19 +30,9 @@ public class CheckoutMenu {
 
     public void checkout(Cart cart) {
 
-
         if (cart.getItems().isEmpty()) {
             System.out.println("Varukorgen är tom.");
             return;
-        }
-
-        for (CartItem item : cart.getItems())
-        {
-            if (!inventoryService.hasStock(item.getProduct().getId(), item.getQty()))
-            {
-                System.out.println("Otillräckligt lager för: " + item.getProduct().getName());
-                return;
-            }
         }
 
         System.out.println("\n=== CHECKOUT ===");
@@ -64,31 +56,37 @@ public class CheckoutMenu {
         if (method == null) return;
 
         try {
+            // ↓ ALL affärslogik i try
             for (CartItem item : cart.getItems()) {
-                inventoryService.decrease(item.getProduct().getId(), item.getQty());
+                inventoryService.decrease(
+                        item.getProduct().getId(),
+                        item.getQty()
+                );
             }
 
             Order order = orderService.createOrderFromCart(cart);
-
             Payment payment = paymentService.processingPayment(order, method);
 
             if (payment.getStatus() == PaymentStatus.APPROVED) {
                 orderService.markAsPaid(order.getId());
-                System.out.println("Betalning godkänd!");
+                cartService.clearCart(cart);
+
+                System.out.println("✅ Betalning godkänd!");
                 System.out.println("Order-ID: " + order.getId());
                 System.out.println("Total: " + order.getTotal() + " kr");
-
-                cartService.clearCart(cart);
             } else {
-                for (CartItem item : cart.getItems()) {
-                    inventoryService.increase(item.getProduct().getId(), item.getQty());
-                }
                 orderService.cancelOrder(order.getId());
                 System.out.println("Betalning nekad");
             }
 
+        } catch (InsufficientStockException e) {
+            System.out.println("Köpet avbröts: " + e.getMessage());
+
+        } catch (ProductNotFoundException e) {
+            System.out.println("Köpet avbröts: " + e.getMessage());
+
         } catch (Exception e) {
-            System.out.println("Checkout misslyckades: " + e.getMessage());
+            System.out.println("Tekniskt fel vid checkout");
         }
     }
 }

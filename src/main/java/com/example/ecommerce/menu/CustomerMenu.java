@@ -60,9 +60,13 @@ public class CustomerMenu {
                 System.out.print("Namn: ");
                 String name = scanner.nextLine();
 
+                boolean existed = customerService.findByEmail(email).isPresent();
                 Customer customer = customerService.createCustomer(email, name);
-
-                System.out.println("Kund registrerad!");
+                if (existed) {
+                    System.out.println("Välkommen tillbaka!");
+                } else {
+                    System.out.println("Kund registrerad!");
+                }
                 return customer;
             } catch (IllegalArgumentException e) {
                 System.out.println("Fel: " + e.getMessage());

@@ -58,14 +58,41 @@ public class CartMenu {
 
         System.out.println();
         System.out.println("1. Checkout");
+        System.out.println("2. Ta bort produkter");
         System.out.println("0. Tillbaka");
         System.out.print("Val: ");
 
         String choice = scanner.nextLine();
 
-        if("1".equals(choice))
-        {
-         checkoutMenu.checkout(cart);
+        switch(choice) {
+            case "1":
+                checkoutMenu.checkout(cart);
+                break;
+            case "2":
+                removeFromCart(cart);
+                break;
+            case "0":
+                return;
+            default:
+                System.out.println("Ogiltigt val");
+        }
+
+    }
+    private void removeFromCart(Cart cart) {
+        System.out.print("Välj produktnummer att ta bort: ");
+
+        try {
+            int index = Integer.parseInt(scanner.nextLine()) - 1;
+
+            CartItem item = cart.getItems().get(index);
+
+            cartService.removeProduct(cart.getCustomer(), item.getProduct());
+
+            System.out.println("Produkten togs bort ur varukorgen");
+
+        } catch (Exception e) {
+            System.out.println("Ogiltigt val");
         }
     }
+
 }

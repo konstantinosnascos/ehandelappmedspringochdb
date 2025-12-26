@@ -1,5 +1,7 @@
 package com.example.ecommerce.menu;
 
+import com.example.ecommerce.exception.InsufficientStockException;
+import com.example.ecommerce.exception.ProductNotFoundException;
 import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.model.Product;
@@ -23,7 +25,7 @@ public class ProductMenu {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    public ProductMenu(CartMenu cartMenu, CustomerMenu customerMenu, CartService cartService, ProductService productService, CategoryService categoryService, InventoryService inventoryService, CustomerMenu customerMenu1) {
+    public ProductMenu(CartMenu cartMenu, CustomerMenu customerMenu, CartService cartService, ProductService productService, CategoryService categoryService, InventoryService inventoryService) {
         this.cartMenu = cartMenu;
         this.customerMenu = customerMenu;
         this.cartService = cartService;
@@ -153,18 +155,30 @@ public class ProductMenu {
 
                                 if (qty <= 0) {
                                     System.out.println("Antal måste vara större än 0");
-                                    return;
+                                    break;
                                 }
 
-                                if(customer == null) {
+                                if (customer == null) {
                                     customer = customerMenu.createCustomer();
                                 }
-                                cartService.addProduct(customer, selectedProduct, qty);
-                                System.out.println("Produkten lades i varukorgen!");
+
+                                try {
+                                    cartService.addProduct(customer, selectedProduct, qty);
+                                    System.out.println("Produkten lades i varukorgen!");
+
+                                } catch (InsufficientStockException e) {
+                                    System.out.println(" " + e.getMessage());
+
+                                } catch (ProductNotFoundException e) {
+                                    System.out.println("Produkten finns inte längre");
+
+                                }
+
                             } catch (NumberFormatException e) {
                                 System.out.println("Du måste ange ett heltal för antal");
                             }
                             break;
+
                         case "2":
                             if(customer == null)
                             {

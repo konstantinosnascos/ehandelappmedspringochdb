@@ -80,5 +80,14 @@ public class CartService {
         cart.getItems().size();
         return cart;
     }
+
+    @Transactional
+    public void removeProduct(Customer customer, Product product) {
+        Cart cart = getOrCreateCart(customer);
+
+        cart.getItems().removeIf(item -> item.getProduct().getId().equals(product.getId()));
+        cartRepository.save(cart);
+    }
+
 }
 
