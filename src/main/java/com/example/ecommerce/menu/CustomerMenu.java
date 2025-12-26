@@ -53,9 +53,16 @@ public class CustomerMenu {
             try {
 
                 System.out.println("\n=== KUNDUPPGIFTER FÖR ATT LÄGGA TILL I VARUKORGEN ===");
+                System.out.println("'0' för att avbryta registrering");
 
                 System.out.print("Email: ");
                 String email = scanner.nextLine();
+
+                if (email.equals("0"))
+                {
+                    System.out.println("Avbröt kundregistrering.");
+                    return null;
+                }
 
                 System.out.print("Namn: ");
                 String name = scanner.nextLine();
