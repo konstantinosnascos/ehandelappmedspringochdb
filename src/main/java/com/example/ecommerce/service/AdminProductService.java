@@ -32,7 +32,11 @@ public class AdminProductService {
         }
         if (sku.isBlank())
         {
-            throw new IllegalArgumentException("SKU för inte vara tom");
+            throw new IllegalArgumentException("SKU får inte vara tom");
+        }
+        if (name.isBlank())
+        {
+            throw new IllegalArgumentException("name får inte vara tom");
         }
 
         Product product = new Product(sku, name, description, price);

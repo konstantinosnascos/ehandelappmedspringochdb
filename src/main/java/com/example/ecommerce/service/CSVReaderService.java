@@ -81,7 +81,7 @@ public class CSVReaderService
                     Product product = new Product(sku, cols[1].trim(), cols[2].trim(),
                             new BigDecimal(cols[3].trim()));
 
-                    String[] categoryNames = cols[4].trim().split(",");
+                    String[] categoryNames = cols[4].trim().split(";");
                     for (String categoryName : categoryNames)
                     {
                         Category category = categoryRepository.findByNameIgnoreCase(categoryName.trim()).orElseGet(() ->
