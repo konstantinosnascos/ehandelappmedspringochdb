@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -19,16 +20,14 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderFromCart(Cart cart)
-    {
+    public Order createOrderFromCart(Cart cart) {
         Order order = new Order();
         order.setCustomer(cart.getCustomer());
         order.setStatus(OrderStatus.NEW);
 
         BigDecimal total = BigDecimal.ZERO;
 
-        for(CartItem ci : cart.getItems())
-        {
+        for (CartItem ci : cart.getItems()) {
             OrderItem item = new OrderItem();
             item.setOrder(order);
             item.setProduct(ci.getProduct());
@@ -61,6 +60,7 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
+
 }
 
 
