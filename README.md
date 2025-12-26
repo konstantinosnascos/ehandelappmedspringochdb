@@ -129,11 +129,13 @@ Tester täcker:
 
 ---
 
-## Kör projektet
-
-1. Skapa en PostgreSQL-databas
+### Starta applikationen (rekommenderat)
+1. Skapa databasen `ecommerce_db`
 2. Uppdatera `application.properties`
-3. Kör applikationen via:
+3. Kör klassen `EcommerceApplication` i IntelliJ
 
+När applikationen startar visas en konsolbaserad meny automatiskt.
+
+### Alternativ: starta via terminal
 ```bash
 mvn spring-boot:run
