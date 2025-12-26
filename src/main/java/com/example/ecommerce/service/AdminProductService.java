@@ -30,6 +30,10 @@ public class AdminProductService {
         {
             throw new IllegalArgumentException("Produkt med SKU " + sku + " finns redan");
         }
+        if (sku.isBlank())
+        {
+            throw new IllegalArgumentException("SKU för inte vara tom");
+        }
 
         Product product = new Product(sku, name, description, price);
         Product savedProduct = productRepository.save(product);

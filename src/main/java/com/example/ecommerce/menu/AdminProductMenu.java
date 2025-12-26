@@ -1,5 +1,6 @@
 package com.example.ecommerce.menu;
 
+import com.example.ecommerce.exception.ProductNotFoundException;
 import com.example.ecommerce.service.AdminProductService;
 import org.springframework.stereotype.Component;
 
@@ -101,25 +102,46 @@ public class AdminProductMenu {
     }
 
     private void deactivateProduct() {
-        System.out.println("\n=== INAKTIVERA PRODUKT ===");
+        try {
+            System.out.println("\n=== INAKTIVERA PRODUKT ===");
 
-        System.out.print("Produkt-ID: ");
-        Long id = Long.parseLong(scanner.nextLine());
+            System.out.print("Produkt-ID: ");
+            Long id = Long.parseLong(scanner.nextLine());
 
-        adminProductService.deactivateProduct(id);
+            adminProductService.deactivateProduct(id);
 
-        System.out.println("✔ Produkten är nu inaktiverad.");
+            System.out.println("✔ Produkten är nu inaktiverad.");
+        }
+        catch (ProductNotFoundException e)
+        {
+            System.out.println("Product not found: " + e.getMessage());
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void activateProduct() {
-        System.out.println("\n=== AKTIVERA PRODUKT ===");
+        try
+        {
+            System.out.println("\n=== AKTIVERA PRODUKT ===");
 
-        System.out.print("Produkt-ID: ");
-        Long id = Long.parseLong(scanner.nextLine());
+            System.out.print("Produkt-ID: ");
+            Long id = Long.parseLong(scanner.nextLine());
 
-        adminProductService.activateProduct(id);
+            adminProductService.activateProduct(id);
 
-        System.out.println("✔ Produkten är nu aktiv igen.");
+            System.out.println("✔ Produkten är nu aktiv igen.");
+        }
+        catch (ProductNotFoundException e)
+        {
+            System.out.println("Product not found: " + e.getMessage());
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void updateStock() {
