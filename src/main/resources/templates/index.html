@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8">
+    <title>E‑handel</title>
+
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Kunder</h1>
+
+<ul>
+    <li th:each="c : ${customers}">
+        <span th:text="${c.name}"></span>
+        (<span th:text="${c.email}"></span>)
+    </li>
+</ul>
+<hr>
+
+<h2>Registrera ny kund</h2>
+
+<form action="/customers" method="post">
+    <div>
+        <label for="name">Namn:</label><br>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <br>
+    <button type="submit">Skapa kund</button>
+</form>
+
+<!-- JS -->
+<script src="/js/app.js"></script>
+</body>
+</html>

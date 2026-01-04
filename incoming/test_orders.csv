@@ -1,0 +1,4 @@
+email,status,date,items
+alice@test.se,PAID,2023-11-01T10:30:00,TEST-MUS:2|TEST-SKARM:1
+bob@test.se,NEW,2023-11-05T14:15:00,TEST-TGB:1
+charlie@test.se,CANCELLED,2023-12-24T09:00:00,TEST-MUS:1|TEST-TGB:1|TEST-SKARM:1
