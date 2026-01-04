@@ -33,6 +33,7 @@ public class CustomerMenu {
                     case 3 -> updateCustomer();
                     case 4 -> deleteCustomer();
                     case 5 -> running = false;
+                    case 6 -> sqlInjectionDemo();
                     default -> System.out.println("Ogiltigt val, försök igen!");
                 }
             } catch (Exception e) {
@@ -49,6 +50,7 @@ public class CustomerMenu {
         System.out.println("3. Uppdatera kund");
         System.out.println("4. Ta bort kund");
         System.out.println("5. Tillbaka till huvudmeny");
+        System.out.println("6. Security demo (SQL injection)");
     }
 
     private void createCustomer() {
@@ -93,5 +95,29 @@ public class CustomerMenu {
         } catch (Exception e) {
             System.out.println("Fel: " + e.getMessage());
         }
+    }
+
+    private void sqlInjectionDemo() {
+        System.out.println("\n=== SQL INJECTION DEMO ===");
+        System.out.println("Testa t.ex:");
+        System.out.println("  normal email: anna@example.com");
+        System.out.println("  injection:    ' OR '1'='1");
+        System.out.println();
+
+        String inputSQL = input.getString("Ange email: ");
+
+        System.out.println("\n[OSÄKER SÖKNING]");
+        customerService.findByEmailUnsafe(inputSQL)
+                .ifPresentOrElse(
+                        c -> System.out.println("HITTADE KUND: " + c.getEmail()),
+                        () -> System.out.println("Ingen kund hittades")
+                );
+
+        System.out.println("\n[SÄKER SÖKNING]");
+        customerService.findByEmail(inputSQL)
+                .ifPresentOrElse(
+                        c -> System.out.println("HITTADE KUND: " + c.getEmail()),
+                        () -> System.out.println("Ingen kund hittades")
+                );
     }
 }

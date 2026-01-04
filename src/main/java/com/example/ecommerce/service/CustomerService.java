@@ -2,6 +2,7 @@ package com.example.ecommerce.service;
 
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.repository.CustomerRepository;
+import com.example.ecommerce.repository.CustomerUnsafeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerUnsafeRepository unsafeRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerUnsafeRepository unsafeRepository) {
         this.customerRepository = customerRepository;
+        this.unsafeRepository = unsafeRepository;
     }
 
     public Customer createCustomer(String email, String name) {
@@ -50,5 +53,9 @@ public class CustomerService {
 
     public Optional<Customer> findByEmail(String email) {
         return customerRepository.findByEmail(email);
+    }
+
+    public Optional<Customer> findByEmailUnsafe(String email) {
+        return unsafeRepository.findByEmailUnsafe(email);
     }
 }
