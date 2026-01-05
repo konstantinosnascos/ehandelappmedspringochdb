@@ -10,6 +10,18 @@
 
         <p>Status: <strong th:text="${order.status}"></strong></p>
 
+        <div th:if="${payment != null}">
+            <p>
+                Betalning:
+                <strong th:text="${payment.status}"></strong>
+                (<span th:text="${payment.method}"></span>)
+            </p>
+        </div>
+
+        <div th:if="${payment == null}">
+            <p>Ingen betalning registrerad ännu.</p>
+        </div>
+
         <ul>
             <li th:each="i : ${order.items}">
                 <span th:text="${i.product.name}"></span>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Mina ordrar</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Mina ordrar</h1>
+
+<table border="1">
+    <tr>
+        <th>Order‑ID</th>
+        <th>Datum</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th></th>
+    </tr>
+
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.id}"></td>
+        <td th:text="${#temporals.format(o.createdAt, 'yyyy‑MM‑dd HH:mm')}"></td>
+        <td th:text="${o.status}"></td>
+        <td th:text="${o.total}"></td>
+        <td>
+            <a th:href="@{/orders/{id}(id=${o.id})}">
+                Visa
+            </a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a href="/products">Tillbaka till produkter</a>
+
+</body>
+</html>
