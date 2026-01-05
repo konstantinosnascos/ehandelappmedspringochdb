@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kategorier</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Kategorier</h1>
+
+<ul>
+    <li th:each="c : ${categories}" th:text="${c.name}"></li>
+</ul>
+
+<hr>
+
+<h2>Skapa ny kategori</h2>
+
+<form th:action="@{/categories}" method="post">
+    <input name="name" placeholder="Kategorinamn" required>
+    <button type="submit">Skapa</button>
+</form>
+
+<br>
+<a href="/products">Tillbaka till produkter</a>
+
+</body>
+</html>
