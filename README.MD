@@ -31,7 +31,10 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce_db
 spring.datasource.username=postgres
 spring.datasource.password=ditt_lösenord
 
-
+##Starta App i webbläsare
+Kör programmet och gå till valfri webbläsare och gå till http://localhost:8080/
+Än så länge kan man se kunder, lägga till kunder ta bort kunder(som inte har ordrar)
+Mer kommer.
 
 ## Starta Applikationen
 Kör följande kommando i projektets rotmapp:
