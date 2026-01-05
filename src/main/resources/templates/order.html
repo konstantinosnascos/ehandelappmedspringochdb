@@ -6,6 +6,14 @@
     </head>
     <body>
 
+        <div th:if="${success}" style="color: green; font-weight: bold;">
+            <p th:text="${success}"></p>
+        </div>
+
+        <div th:if="${error}" style="color: red; font-weight: bold;">
+            <p th:text="${error}"></p>
+        </div>
+
         <h1>Order #<span th:text="${order.id}"></span></h1>
 
         <p>Status: <strong th:text="${order.status}"></strong></p>

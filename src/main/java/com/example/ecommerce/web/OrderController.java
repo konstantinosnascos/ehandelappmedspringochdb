@@ -8,6 +8,8 @@ import com.example.ecommerce.service.InventoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import org.springframework.ui.Model;
 
 @Controller
@@ -45,7 +47,8 @@ public class OrderController {
     @PostMapping("/{id}/pay")
     public String payOrder(
             @PathVariable Long id,
-            @RequestParam PaymentMethod method
+            @RequestParam PaymentMethod method,
+            RedirectAttributes redirectAttributes
     ) {
         Order order = orderService.getOrderById(id);
         Payment payment = paymentService.processingPayment(order, method);
@@ -60,6 +63,17 @@ public class OrderController {
             });
 
             orderService.markAsPaid(order.getId());
+
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Betalningen godkändes"
+            );
+
+        } else {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Betalningen nekades Försök igen eller välj annat betalsätt."
+            );
         }
 
         return "redirect:/orders/" + id;
