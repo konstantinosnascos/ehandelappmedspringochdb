@@ -1,5 +1,6 @@
 package com.example.ecommerce.web;
 
+import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.service.CustomerService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -44,5 +45,23 @@ public class WebController {
         return "redirect:/";
     }
 
+    @GetMapping("/customers/edit")
+    public String editCustomer(
+            @RequestParam String email,
+            Model model
+    ) {
+        Customer customer = customerService.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Kund finns inte"));
+        model.addAttribute("customer", customer);
+        return "edit-customer";
+    }
 
+    @PostMapping("/customers/update")
+    public String updateCustomer(
+            @RequestParam String email,
+            @RequestParam String name
+    ) {
+        customerService.updateCustomer(email, name);
+        return "redirect:/";
+    }
 }
