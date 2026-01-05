@@ -3,7 +3,9 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.repository.CustomerUnsafeRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +47,15 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public void deleteCustomer(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Kund med email " + email + " hittades inte."));
-        customerRepository.delete(customer);
+        try {
+            customerRepository.deleteByEmail(email);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException(
+                    "Kunden kan inte tas bort eftersom den har ordrar"
+            );
+        }
     }
 
     public Optional<Customer> findByEmail(String email) {

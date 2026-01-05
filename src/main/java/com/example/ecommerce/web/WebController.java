@@ -1,11 +1,13 @@
 package com.example.ecommerce.web;
 
 import com.example.ecommerce.service.CustomerService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class WebController {
@@ -30,4 +32,17 @@ public class WebController {
         customerService.createCustomer(email, name);
         return "redirect:/";
     }
+
+    @PostMapping("/customers/delete")
+    public String deleteCustomer(@RequestParam String email, RedirectAttributes ra) {
+        try {
+            customerService.deleteCustomer(email);
+            ra.addFlashAttribute("message", "Kunden togs bort.");
+        } catch (DataIntegrityViolationException e) {
+            ra.addFlashAttribute("error", "Kunden kan inte tas bort eftersom den har ordrar.");
+        }
+        return "redirect:/";
+    }
+
+
 }

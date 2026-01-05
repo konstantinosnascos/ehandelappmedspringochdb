@@ -14,6 +14,11 @@
     <li th:each="c : ${customers}">
         <span th:text="${c.name}"></span>
         (<span th:text="${c.email}"></span>)
+
+        <form th:action="@{/customers/delete}" method="post" style="display:inline;">
+            <input type="hidden" name="email" th:value="${c.email}">
+            <button type="submit">Ta bort</button>
+        </form>
     </li>
 </ul>
 <hr>
@@ -31,6 +36,9 @@
         <input type="email" id="email" name="email" required>
     </div>
 
+    <div><p th:if="${error}" style="color:red;" th:text="${error}"></p>
+        <p th:if="${success}" style="color:green;" th:text="${success}"></p>
+    </div>
     <br>
     <button type="submit">Skapa kund</button>
 </form>
