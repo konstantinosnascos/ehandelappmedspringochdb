@@ -46,6 +46,18 @@
     <button type="submit">Skapa kund</button>
 </form>
 
+<h3>Välj aktiv kund</h3>
+
+<form action="/select-customer" method="post">
+    <select name="email">
+        <option th:each="c : ${customers}"
+                th:value="${c.email}"
+                th:text="${c.name}">
+        </option>
+    </select>
+    <button type="submit">Välj kund</button>
+</form>
+
 <!-- JS -->
 <script src="/js/app.js"></script>
 </body>

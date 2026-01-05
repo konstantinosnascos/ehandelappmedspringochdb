@@ -2,6 +2,7 @@ package com.example.ecommerce.web;
 
 import com.example.ecommerce.model.Customer;
 import com.example.ecommerce.service.CustomerService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,5 +64,14 @@ public class WebController {
     ) {
         customerService.updateCustomer(email, name);
         return "redirect:/";
+    }
+
+    @PostMapping("/select-customer")
+    public String selectCustomer(
+            @RequestParam String email,
+            HttpSession session
+    ) {
+        session.setAttribute("customerEmail", email);
+        return "redirect:/products";
     }
 }
