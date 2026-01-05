@@ -28,7 +28,8 @@ public class ProductController {
 
     @GetMapping
     public String listProducts(Model model) {
-        model.addAttribute("products", productService.listActiveProducts());
+        model.addAttribute("activeProducts", productService.listActiveProducts());
+        model.addAttribute("inactiveProducts", productService.listInactiveProducts());
         model.addAttribute("inventoryService", inventoryService);
         return "products";
     }
@@ -48,6 +49,12 @@ public class ProductController {
     @PostMapping("/deactivate")
     public String deactivateProduct(@RequestParam Long productId) {
         adminProductService.deactivateProduct(productId);
+        return "redirect:/products";
+    }
+
+    @PostMapping("/activate")
+    public String activateProduct(@RequestParam Long productId) {
+        adminProductService.activateProduct(productId);
         return "redirect:/products";
     }
 }

@@ -9,7 +9,9 @@
 
 <h1>Produkter</h1>
 
-<table border="1" cellpadding="5">
+<h2>Aktiva produkter</h2>
+
+<table border="1">
     <tr>
         <th>SKU</th>
         <th>Namn</th>
@@ -18,16 +20,38 @@
         <th>Åtgärd</th>
     </tr>
 
-    <tr th:each="p : ${products}">
+    <tr th:each="p : ${activeProducts}">
         <td th:text="${p.sku}"></td>
         <td th:text="${p.name}"></td>
         <td th:text="${p.price}"></td>
         <td th:text="${inventoryService.getStockLevel(p.id)}"></td>
-
         <td>
             <form th:action="@{/products/deactivate}" method="post">
                 <input type="hidden" name="productId" th:value="${p.id}">
                 <button type="submit">Inaktivera</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Inaktiva produkter</h2>
+
+<table border="1">
+    <tr>
+        <th>SKU</th>
+        <th>Namn</th>
+        <th>Pris</th>
+        <th>Åtgärd</th>
+    </tr>
+
+    <tr th:each="p : ${inactiveProducts}">
+        <td th:text="${p.sku}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td>
+            <form th:action="@{/products/activate}" method="post">
+                <input type="hidden" name="productId" th:value="${p.id}">
+                <button type="submit">Aktivera</button>
             </form>
         </td>
     </tr>
