@@ -4,6 +4,7 @@ import com.example.ecommerce.model.*;
 import com.example.ecommerce.service.CustomerService;
 import com.example.ecommerce.service.OrderService;
 import com.example.ecommerce.service.PaymentService;
+import com.example.ecommerce.service.InventoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,16 @@ public class OrderController {
     private final OrderService orderService;
     private final PaymentService paymentService;
     private final CustomerService customerService;
+    private final InventoryService inventoryService;
 
-    public OrderController(OrderService orderService, PaymentService paymentService, CustomerService customerService) {
+    public OrderController(OrderService orderService,
+                           PaymentService paymentService,
+                           CustomerService customerService,
+                           InventoryService inventoryService) {
         this.orderService = orderService;
         this.paymentService = paymentService;
         this.customerService = customerService;
+        this.inventoryService = inventoryService;
     }
 
     @GetMapping("/{id}")
@@ -45,6 +51,14 @@ public class OrderController {
         Payment payment = paymentService.processingPayment(order, method);
 
         if (payment.getStatus() == PaymentStatus.APPROVED) {
+
+            order.getItems().forEach(item -> {
+                inventoryService.decrease(
+                        item.getProduct().getId(),
+                        item.getQty()
+                );
+            });
+
             orderService.markAsPaid(order.getId());
         }
 
