@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Top Products</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+    <body>
+
+        <h2>Top 5 mest sålda produkter</h2>
+
+        <table border="1">
+            <tr>
+                <th>Produkt</th>
+                <th>Sålda antal</th>
+            </tr>
+
+            <tr th:each="row : ${topProducts}">
+                <td th:text="${row[0]}"></td>
+                <td th:text="${row[1]}"></td>
+            </tr>
+        </table>
+
+        <a href="/admin">Tillbaka</a>
+
+    </body>
+</html>

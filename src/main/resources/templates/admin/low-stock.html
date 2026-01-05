@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Low Stock</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+    <body>
+
+        <h2>Lågt lager (mindre än <span th:text="${threshold}"></span>)</h2>
+
+        <table border="1">
+            <tr>
+                <th>Produkt</th>
+                <th>I lager</th>
+            </tr>
+
+            <tr th:each="p : ${products}">
+                <td th:text="${p.name}"></td>
+                <td th:text="${inventoryService.getStockLevel(p.id)}"></td>
+            </tr>
+        </table>
+
+        <a href="/admin">Tillbaka</a>
+
+    </body>
+</html>

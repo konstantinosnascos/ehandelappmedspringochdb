@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Revenue</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+    <body>
+
+        <h2>Omsättning</h2>
+
+        <form method="get">
+            <input type="date" name="from" required>
+            <input type="date" name="to" required>
+            <button type="submit">Visa</button>
+        </form>
+
+        <div th:if="${revenue != null}">
+            <p>Total omsättning:
+                <strong th:text="${revenue}"></strong>
+            </p>
+        </div>
+
+        <a href="/admin">Tillbaka</a>
+
+    </body>
+</html>
