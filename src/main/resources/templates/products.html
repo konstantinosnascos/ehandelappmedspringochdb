@@ -30,6 +30,18 @@
                 <input type="hidden" name="productId" th:value="${p.id}">
                 <button type="submit">Inaktivera</button>
             </form>
+            <form th:action="@{/products/add-category}" method="post">
+                <input type="hidden" name="productId" th:value="${p.id}">
+
+                <select name="categoryId">
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}">
+                    </option>
+                </select>
+
+                <button type="submit">Lägg till</button>
+            </form>
         </td>
     </tr>
 </table>

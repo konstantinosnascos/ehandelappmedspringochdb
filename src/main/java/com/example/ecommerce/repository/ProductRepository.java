@@ -17,7 +17,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     Optional<Product> findBySku(String sku);
 
     List<Product> findByNameContainingIgnoreCase(String keyword);
-    List<Product> findByCategoriesNameIgnoreCase(String categoryName);
+    @Query("""
+    SELECT DISTINCT p
+    FROM Product p
+    JOIN p.categories c
+    WHERE LOWER(c.name) = LOWER(:name)
+      AND p.active = true
+    """)
+    List<Product> findActiveProductsByCategoryName(@Param("name") String name);
 
     boolean existsBySku(String sku);
 

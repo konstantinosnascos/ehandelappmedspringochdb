@@ -66,6 +66,14 @@ public class Product {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
 

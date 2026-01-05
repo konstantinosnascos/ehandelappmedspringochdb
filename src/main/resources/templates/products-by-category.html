@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Produkter</title>
+</head>
+<body>
+
+<h1 th:text="'Kategori: ' + ${category}"></h1>
+
+<ul>
+    <li th:each="p : ${products}">
+        <span th:text="${p.name}"></span>
+        (<span th:text="${p.price}"></span>)
+    </li>
+</ul>
+
+<a href="/products">Tillbaka</a>
+
+</body>
+</html>

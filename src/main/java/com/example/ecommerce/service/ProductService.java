@@ -20,11 +20,7 @@ public class ProductService {
     }
 
     public List<Product> getProductsByCategory(String categoryName) {
-        return productRepository
-                .findByCategoriesNameIgnoreCase(categoryName)
-                .stream()
-                .filter(Product::isActive)
-                .toList();
+        return productRepository.findActiveProductsByCategoryName(categoryName);
     }
 
     public Optional<Product> getProductBySku(String sku)
@@ -50,5 +46,9 @@ public class ProductService {
 
     public Optional<Product> findBySku(String sku) {
         return productRepository.findBySku(sku);
+    }
+
+    public Optional<Product> getProductById(Long productId) {
+        return productRepository.findById(productId);
     }
 }

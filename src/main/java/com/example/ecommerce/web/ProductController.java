@@ -1,7 +1,9 @@
 package com.example.ecommerce.web;
 
+import com.example.ecommerce.model.Category;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.AdminProductService;
+import com.example.ecommerce.service.CategoryService;
 import com.example.ecommerce.service.ProductService;
 import com.example.ecommerce.service.InventoryService;
 import org.springframework.stereotype.Controller;
@@ -17,13 +19,16 @@ public class ProductController {
     private final ProductService productService;
     private final AdminProductService adminProductService;
     private final InventoryService inventoryService;
+    private final CategoryService categoryService;
 
     public ProductController(ProductService productService,
                              AdminProductService adminProductService,
-                             InventoryService inventoryService) {
+                             InventoryService inventoryService,
+                             CategoryService categoryService) {
         this.productService = productService;
         this.adminProductService = adminProductService;
         this.inventoryService = inventoryService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -31,6 +36,7 @@ public class ProductController {
         model.addAttribute("activeProducts", productService.listActiveProducts());
         model.addAttribute("inactiveProducts", productService.listInactiveProducts());
         model.addAttribute("inventoryService", inventoryService);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "products";
     }
 
@@ -56,5 +62,31 @@ public class ProductController {
     public String activateProduct(@RequestParam Long productId) {
         adminProductService.activateProduct(productId);
         return "redirect:/products";
+    }
+
+    @PostMapping("/add-category")
+    public String addCategoryToProduct(
+            @RequestParam Long productId,
+            @RequestParam Long categoryId
+    ) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Produkt finns inte"));
+        Category category = categoryService.getCategoriyViaId(categoryId)
+                .orElseThrow();
+
+        product.getCategories().add(category);
+        productService.updateProduct(product);
+
+        return "redirect:/products";
+    }
+
+    @GetMapping("/category/{name}")
+    public String productsByCategory(
+            @PathVariable String name,
+            Model model
+    ) {
+        model.addAttribute("products", productService.getProductsByCategory(name));
+        model.addAttribute("category", name);
+        return "products-by-category";
     }
 }
