@@ -61,8 +61,10 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void clearCart(Cart cart) {
-        cartRepository.delete(cart);
+        cart.getItems().clear();
+        cartRepository.save(cart);
     }
 
     public void removeProduct(Customer customer, String sku) {
