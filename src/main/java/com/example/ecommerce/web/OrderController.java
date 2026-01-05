@@ -35,7 +35,7 @@ public class OrderController {
     public String viewOrder(@PathVariable Long id, Model model) {
         Order order = orderService.getOrderById(id);
 
-        paymentService.getPaymentByOrder(order)
+        paymentService.getLatestPaymentByOrder(order)
                 .ifPresent(payment -> model.addAttribute("payment", payment));
 
         model.addAttribute("order", order);

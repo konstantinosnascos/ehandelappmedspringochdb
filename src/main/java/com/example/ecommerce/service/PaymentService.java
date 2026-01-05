@@ -28,7 +28,7 @@ public class PaymentService
 
     public boolean simulatedPayment()
     {
-        return random.nextInt(10) < 9;
+        return random.nextInt(10) < 4;
     }
 
     public Payment processingPayment(Order order, PaymentMethod method)
@@ -52,5 +52,11 @@ public class PaymentService
     public Optional<Payment> getPaymentByOrder(Order order)
     {
         return paymentRepository.findByOrder(order);
+    }
+
+    public Optional<Payment> getLatestPaymentByOrder(Order order) {
+        return paymentRepository.findLatestByOrder(order)
+                .stream()
+                .findFirst();
     }
 }
