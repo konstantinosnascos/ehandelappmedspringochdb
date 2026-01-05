@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8">
+    <title>Beställning</title>
+    <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+
+        <h1>Order #<span th:text="${order.id}"></span></h1>
+
+        <p>Status: <strong th:text="${order.status}"></strong></p>
+
+        <ul>
+            <li th:each="i : ${order.items}">
+                <span th:text="${i.product.name}"></span>
+                x <span th:text="${i.qty}"></span>
+            </li>
+        </ul>
+
+        <p>Total: <strong th:text="${order.total}"></strong></p>
+
+        <form th:if="${order.status.name() == 'NEW'}"
+              th:action="@{/orders/{id}/pay(id=${order.id})}" method="post">
+            <select name="method">
+                <option th:each="m : ${methods}"
+                        th:value="${m}"
+                        th:text="${m}">
+                </option>
+            </select>
+            <button type="submit">Betala</button>
+        </form>
+
+        <br>
+        <a href="/">Tillbaka</a>
+
+    </body>
+</html>
