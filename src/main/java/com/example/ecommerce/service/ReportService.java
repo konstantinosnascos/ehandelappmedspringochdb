@@ -4,6 +4,8 @@ import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import com.example.ecommerce.dto.TopProductDTO;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,9 +31,10 @@ public class ReportService
         this.orderRepository = orderRepository;
     }
 
-    public List<Object[]> getTopSellingProducts(int x)
-    {
-        return orderRepository.findTopSellingProducts(x);
+    public List<TopProductDTO> getTopSellingProducts(int x) {
+        return orderRepository.findTopSellingProducts(
+                PageRequest.of(0, x)
+        );
     }
 
     public List<Product> getLowStockProducts(int threshold)

@@ -15,9 +15,9 @@
                 <th>Sålda antal</th>
             </tr>
 
-            <tr th:each="row : ${topProducts}">
-                <td th:text="${row[0]}"></td>
-                <td th:text="${row[1]}"></td>
+            <tr th:each="p : ${topProducts}">
+                <td th:text="${p.name}"></td>
+                <td th:text="${p.totalSold}"></td>
             </tr>
         </table>
 

@@ -78,16 +78,6 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Map<Product, Long> getTopProducts(int limit) {
-        List<Object[]> results = orderRepository.findTopSellingProducts(limit);
-
-        return null;
-    }
-
-    public List<Object[]> getTopSellingProducts(int limit) {
-        return orderRepository.findTopSellingProducts(limit);
-    }
-
     public BigDecimal getTotalRevenue(LocalDate start, LocalDate end) {
         return orderRepository.calculateRevenueBetween(start.atStartOfDay(), end.atTime(23, 59, 59));
     }

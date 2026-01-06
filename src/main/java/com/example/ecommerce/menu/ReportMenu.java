@@ -5,6 +5,7 @@ import com.example.ecommerce.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import com.example.ecommerce.dto.TopProductDTO;
 
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class ReportMenu {
 
     private void topProducts() {
         int limit = input.getInt("Hur många produkter? ");
-        List<Object[]> results = reportService.getTopSellingProducts(limit);
+        List<TopProductDTO> results = reportService.getTopSellingProducts(limit);
+
         System.out.println("--- TOPPLISTA ---");
-        for (Object[] row : results) {
-            System.out.println(row[0] + " - Antal sålda: " + row[1]);
+        for (TopProductDTO p : results) {
+            System.out.println(p.name() + " - Antal sålda: " + p.totalSold());
         }
     }
 }
