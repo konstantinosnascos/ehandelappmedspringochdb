@@ -20,7 +20,7 @@
         <th>Åtgärd</th>
     </tr>
 
-    <tr th:each="p : ${activeProducts}">
+    <tr th:each="p : ${activeProducts.content}">
         <td th:text="${p.sku}"></td>
         <td th:text="${p.name}"></td>
         <td th:text="${p.price}"></td>
@@ -45,6 +45,22 @@
         </td>
     </tr>
 </table>
+<div>
+    <a th:if="${activeProducts.hasPrevious()}"
+       th:href="@{/products(page=${activeProducts.number - 1})}">
+        Föregående
+    </a>
+
+    <span>
+        Sida <span th:text="${activeProducts.number + 1}"></span>
+        av <span th:text="${activeProducts.totalPages}"></span>
+    </span>
+
+    <a th:if="${activeProducts.hasNext()}"
+       th:href="@{/products(page=${activeProducts.number + 1})}">
+        Nästa
+    </a>
+</div>
 
 <h2>Inaktiva produkter</h2>
 

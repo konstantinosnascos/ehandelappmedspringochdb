@@ -58,7 +58,7 @@ public class ProductMenu {
     }
 
     private void listProducts() {
-        List<Product> products = productService.listActiveProducts();
+        List<Product> products = productService.listActiveProductsForConsole();
         if (products.isEmpty()) {
             System.out.println("Inga aktiva produkter hittades.");
             return;

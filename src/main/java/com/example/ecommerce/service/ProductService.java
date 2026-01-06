@@ -2,6 +2,8 @@ package com.example.ecommerce.service;
 
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,9 +16,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> listActiveProducts()
+    public List<Product> listActiveProductsForConsole()
     {
         return productRepository.findByActive(true);
+    }
+
+    public Page<Product> listActiveProducts(Pageable pageable) {
+        return productRepository.findByActiveTrue(pageable);
     }
 
     public List<Product> getProductsByCategory(String categoryName) {

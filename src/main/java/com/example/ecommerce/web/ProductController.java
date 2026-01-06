@@ -1,6 +1,8 @@
 package com.example.ecommerce.web;
 
 import com.example.ecommerce.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.service.AdminProductService;
 import com.example.ecommerce.service.CategoryService;
@@ -32,11 +34,21 @@ public class ProductController {
     }
 
     @GetMapping
-    public String listProducts(Model model) {
-        model.addAttribute("activeProducts", productService.listActiveProducts());
+    public String listProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model
+    ) {
+        Page<Product> activeProducts =
+                productService.listActiveProducts(
+                        PageRequest.of(page, size)
+                );
+
+        model.addAttribute("activeProducts", activeProducts);
         model.addAttribute("inactiveProducts", productService.listInactiveProducts());
         model.addAttribute("inventoryService", inventoryService);
         model.addAttribute("categories", categoryService.getAllCategories());
+
         return "products";
     }
 

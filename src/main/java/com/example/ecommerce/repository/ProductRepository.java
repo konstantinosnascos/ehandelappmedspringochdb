@@ -1,6 +1,8 @@
 package com.example.ecommerce.repository;
 
 import com.example.ecommerce.dto.LowStockDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.ecommerce.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +32,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     boolean existsBySku(String sku);
 
     List<Product> findByActive(boolean active);
+
+    Page<Product> findByActiveTrue(Pageable pageable);
 
     @Query("SELECT p FROM Product p JOIN Inventory i ON p.id = i.productId WHERE i.inStock < :threshold")
     List<Product> findProductsWithLowStock(@Param("threshold") int threshold);
