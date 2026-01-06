@@ -11,7 +11,7 @@
         <h1>Kunder</h1>
 
         <ul>
-            <li th:each="c : ${customers}">
+            <li th:each="c : ${customers.content}">
                 <span th:text="${c.name}"></span>
                 (<span th:text="${c.email}"></span>)
 
@@ -24,6 +24,22 @@
                 </form>
             </li>
         </ul>
+        <div>
+            <a th:if="${customers.hasPrevious()}"
+               th:href="@{/(page=${customers.number - 1})}">
+                Föregående
+            </a>
+
+            <span>
+                Sida <span th:text="${customers.number + 1}"></span>
+                av <span th:text="${customers.totalPages}"></span>
+            </span>
+
+            <a th:if="${customers.hasNext()}"
+               th:href="@{/(page=${customers.number + 1})}">
+                Nästa
+            </a>
+        </div>
         <hr>
 
         <h2>Registrera ny kund</h2>

@@ -1,6 +1,8 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.model.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.repository.CustomerUnsafeRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,8 +35,12 @@ public class CustomerService {
                 .orElseGet(() -> customerRepository.save(new Customer(email, name)));
     }
 
-    public List<Customer> getAllCustomers() {
+    public List<Customer> getAllCustomersForConsole() {
         return customerRepository.findAll();
+    }
+
+    public Page<Customer> getAllCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
 
     public void updateCustomer(String email, String newName) {

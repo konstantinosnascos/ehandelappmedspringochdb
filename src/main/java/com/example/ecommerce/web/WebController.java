@@ -1,6 +1,8 @@
 package com.example.ecommerce.web;
 
 import com.example.ecommerce.model.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import com.example.ecommerce.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,8 +23,18 @@ public class WebController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
+    public String home(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model
+    ) {
+        Page<Customer> customers =
+                customerService.getAllCustomers(
+                        PageRequest.of(page, size)
+                );
+
+        model.addAttribute("customers", customers);
+
         return "index";
     }
 

@@ -65,7 +65,7 @@ public class CustomerMenu {
     }
 
     private void listCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
+        List<Customer> customers = customerService.getAllCustomersForConsole();
         if (customers.isEmpty()) {
             System.out.println("Inga kunder hittades.");
             return;
