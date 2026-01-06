@@ -80,3 +80,14 @@ create table payments (
     status varchar(20) not null default 'PENDING' check (status in ('PENDING', 'APPROVED', 'DECLINED')),
     timestamp timestamp not null default current_timestamp
 );
+
+create table roles (
+    id serial primary key,
+    name varchar(50) not null unique
+);
+
+create table customer_roles (
+    customer_id integer not null references customers(id) on delete cascade,
+    role_id integer not null references roles(id) on delete cascade,
+    primary key (customer_id, role_id)
+);

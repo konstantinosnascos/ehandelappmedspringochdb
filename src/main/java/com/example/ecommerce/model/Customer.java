@@ -2,7 +2,9 @@ package com.example.ecommerce.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -33,6 +35,19 @@ public class Customer {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "customer_roles",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public boolean hasRole(String roleName) {
+        return roles.stream()
+                .anyMatch(r -> r.getName().equals(roleName));
     }
 
     public Long getId() {

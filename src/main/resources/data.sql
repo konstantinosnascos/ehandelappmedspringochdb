@@ -84,3 +84,18 @@ insert into payments (order_id, method, status) values
     (2, 'CARD', 'APPROVED'),
     (4, 'CARD', 'DECLINED'),
     (5, 'INVOICE', 'APPROVED');
+
+insert into roles (name) values
+    ('CUSTOMER'),
+    ('ADMIN'),
+    ('REPORT_VIEWER');
+
+insert into customer_roles (customer_id, role_id)
+values (
+    1,
+    (select id from roles where name = 'ADMIN')
+);
+
+insert into customer_roles (customer_id, role_id)
+select id, (select id from roles where name = 'CUSTOMER')
+from customers;
