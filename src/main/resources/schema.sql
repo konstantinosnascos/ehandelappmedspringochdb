@@ -8,6 +8,8 @@ drop table if exists product_category cascade;
 drop table if exists products cascade;
 drop table if exists categories cascade;
 drop table if exists customers cascade;
+drop table if exists customer_roles cascade;
+drop table if exists roles cascade;
 
 create table categories (
     id serial primary key,

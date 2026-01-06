@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header class="header" th:fragment="navbar">
+    <nav class="container nav">
+
+        <a href="/products" class="logo">E‑Shop</a>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/products">Produkter</a>
+            </li>
+
+            <li>
+                <a href="/cart">Varukorg</a>
+            </li>
+
+            <li>
+                <a href="/orders">Mina ordrar</a>
+            </li>
+
+            <li th:if="${activeCustomer != null and activeCustomer.hasRole('ADMIN')}">
+                <a href="/admin">Admin</a>
+            </li>
+
+            <li th:if="${activeCustomer != null}">
+                <span th:text="${activeCustomer.name}"></span>
+            </li>
+
+        </ul>
+
+    </nav>
+</header>
+
+</body>
+</html>
