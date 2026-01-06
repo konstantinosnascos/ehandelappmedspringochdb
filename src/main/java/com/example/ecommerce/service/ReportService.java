@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.model.Product;
+import com.example.ecommerce.dto.RevenueDTO;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -41,16 +42,12 @@ public class ReportService
         return productRepository.findLowStockProducts(threshold);
     }
 
-    public BigDecimal getRevenueBetween(LocalDateTime start, LocalDateTime end)
-    {
+
+    public RevenueDTO getRevenueBetween(LocalDateTime start, LocalDateTime end) {
         BigDecimal revenue = orderRepository.calculateRevenueBetween(start, end);
-        if(revenue != null)
-        {
-            return revenue;
-        }
-        else
-        {
-            return BigDecimal.ZERO;
-        }
+
+        return new RevenueDTO(
+                revenue != null ? revenue : BigDecimal.ZERO
+        );
     }
 }
