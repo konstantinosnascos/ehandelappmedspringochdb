@@ -278,3 +278,34 @@ body > a {
     border-radius: 999px;
     margin-left: 0.35rem;
 }
+
+.cart-menu {
+    position: relative;
+}
+
+.mini-cart {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    width: 260px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 1rem;
+    z-index: 200;
+}
+
+.cart-menu:hover .mini-cart {
+    display: block;
+}
+
+.mini-cart ul {
+    list-style: none;
+    margin-bottom: 0.75rem;
+}
+
+.mini-cart li {
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+}
