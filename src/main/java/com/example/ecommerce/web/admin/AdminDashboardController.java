@@ -1,7 +1,11 @@
 package com.example.ecommerce.web.admin;
 
+import com.example.ecommerce.exception.AccessDeniedException;
+import com.example.ecommerce.model.Customer;
+import com.example.ecommerce.service.CustomerService;
 import com.example.ecommerce.service.ReportService;
 import com.example.ecommerce.service.InventoryService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +18,25 @@ public class AdminDashboardController {
 
     private final ReportService reportService;
     private final InventoryService inventoryService;
+    private final CustomerService customerService;
 
     public AdminDashboardController(ReportService reportService,
-                                    InventoryService inventoryService) {
+                                    InventoryService inventoryService,
+                                    CustomerService customerService) {
         this.reportService = reportService;
         this.inventoryService = inventoryService;
+        this.customerService = customerService;
     }
 
     @GetMapping
-    public String dashboard() {
+    public String dashboard(HttpSession session) {
+        requireAdmin(session);
         return "admin/dashboard";
     }
 
     @GetMapping("/reports/top-products")
-    public String topProducts(Model model) {
+    public String topProducts(HttpSession session, Model model) {
+        requireAdmin(session);
         model.addAttribute(
                 "topProducts",
                 reportService.getTopSellingProducts(5)
@@ -38,8 +47,10 @@ public class AdminDashboardController {
     @GetMapping("/reports/low-stock")
     public String lowStock(
             @RequestParam(defaultValue = "5") int lt,
+            HttpSession session,
             Model model
     ) {
+        requireAdmin(session);
         model.addAttribute(
                 "lowStockProducts",
                 reportService.getLowStockProducts(lt)
@@ -53,8 +64,10 @@ public class AdminDashboardController {
     public String revenue(
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String to,
+            HttpSession session,
             Model model
     ) {
+        requireAdmin(session);
         if (from != null && to != null) {
             model.addAttribute(
                     "revenue",
@@ -65,5 +78,23 @@ public class AdminDashboardController {
             );
         }
         return "admin/revenue";
+    }
+
+    private void requireAdmin(HttpSession session)
+    {
+        String email = (String) session.getAttribute("customerEmail");
+
+        if(email==null)
+        {
+            throw new AccessDeniedException("Ingen kund vald");
+        }
+
+        Customer customer = customerService.findByEmail(email)
+                .orElseThrow(() -> new AccessDeniedException("Kund finns inte"));
+
+        if(!customer.hasRole("ADMIN"))
+        {
+            throw new AccessDeniedException("Du saknar behörighet att se admin-sidor");
+        }
     }
 }
