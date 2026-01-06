@@ -269,3 +269,12 @@ body > a {
     font-weight: 500;
     white-space: nowrap;
 }
+
+.cart-badge {
+    background-color: #2563eb;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.35rem;
+}

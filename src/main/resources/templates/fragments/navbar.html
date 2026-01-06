@@ -29,6 +29,34 @@
                 <span th:text="${activeCustomer.name}"></span>
             </li>
 
+            <li class="cart-menu">
+                <a href="/cart">
+                    Varukorg
+                    <span th:if="${cartItemCount > 0}"
+                          class="cart-badge"
+                          th:text="${cartItemCount}">
+        </span>
+                </a>
+
+                <div class="mini-cart">
+                    <p th:if="${cartItemCount == 0}">
+                        Varukorgen är tom
+                    </p>
+
+                    <ul th:if="${cartItemCount > 0}">
+                        <li th:each="item : ${activeCustomer != null ?
+                                 @cartService.getCartWithItems(activeCustomer).items : {}}">
+                            <span th:text="${item.product.name}"></span>
+                            × <span th:text="${item.qty}"></span>
+                        </li>
+                    </ul>
+
+                    <a href="/cart" class="btn btn-primary">
+                        Till varukorg
+                    </a>
+                </div>
+            </li>
+
         </ul>
 
     </nav>
