@@ -6,7 +6,7 @@ import com.example.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import com.example.ecommerce.dto.TopProductDTO;
 import org.springframework.data.domain.PageRequest;
-
+import com.example.ecommerce.dto.LowStockDTO;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,9 +37,8 @@ public class ReportService
         );
     }
 
-    public List<Product> getLowStockProducts(int threshold)
-    {
-        return productRepository.findProductsWithLowStock(threshold);
+    public List<LowStockDTO> getLowStockProducts(int threshold) {
+        return productRepository.findLowStockProducts(threshold);
     }
 
     public BigDecimal getRevenueBetween(LocalDateTime start, LocalDateTime end)

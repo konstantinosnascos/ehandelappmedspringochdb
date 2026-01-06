@@ -15,9 +15,9 @@
                 <th>I lager</th>
             </tr>
 
-            <tr th:each="p : ${products}">
-                <td th:text="${p.name}"></td>
-                <td th:text="${inventoryService.getStockLevel(p.id)}"></td>
+            <tr th:each="p : ${lowStockProducts}">
+                <td th:text="${p.productName}"></td>
+                <td th:text="${p.inStock}"></td>
             </tr>
         </table>
 

@@ -41,12 +41,10 @@ public class AdminDashboardController {
             Model model
     ) {
         model.addAttribute(
-                "products",
+                "lowStockProducts",
                 reportService.getLowStockProducts(lt)
         );
         model.addAttribute("threshold", lt);
-
-        model.addAttribute("inventoryService", inventoryService);
 
         return "admin/low-stock";
     }

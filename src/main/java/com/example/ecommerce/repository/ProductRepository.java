@@ -1,5 +1,6 @@
 package com.example.ecommerce.repository;
 
+import com.example.ecommerce.dto.LowStockDTO;
 import com.example.ecommerce.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,6 +33,18 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
     @Query("SELECT p FROM Product p JOIN Inventory i ON p.id = i.productId WHERE i.inStock < :threshold")
     List<Product> findProductsWithLowStock(@Param("threshold") int threshold);
+
+    @Query("""
+    SELECT new com.example.ecommerce.dto.LowStockDTO(
+        p.name,
+        i.inStock
+    )
+    FROM Product p
+    JOIN Inventory i ON i.product = p
+    WHERE i.inStock < :threshold
+    ORDER BY i.inStock ASC
+""")
+    List<LowStockDTO> findLowStockProducts(@Param("threshold") int threshold);
 
     // findAll(), findById(), save(), delete() finns redan från JpaRepository och behöver inte skapas
 
