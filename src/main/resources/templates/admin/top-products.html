@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Top Products</title>
+    <title>Topprodukter</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-    <body>
+<body>
 
+<div class="container">
+
+    <h1>Topprodukter</h1>
+
+    <div class="card">
         <h2>Top 5 mest sålda produkter</h2>
 
-        <table border="1">
+        <table>
             <tr>
                 <th>Produkt</th>
                 <th>Sålda antal</th>
@@ -20,8 +25,13 @@
                 <td th:text="${p.totalSold}"></td>
             </tr>
         </table>
+    </div>
 
-        <a href="/admin">Tillbaka</a>
+    <div class="card">
+        <a href="/admin">Tillbaka till dashboard</a>
+    </div>
 
-    </body>
+</div>
+
+</body>
 </html>

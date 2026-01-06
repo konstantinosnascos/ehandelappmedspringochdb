@@ -1,30 +1,35 @@
 <!DOCTYPE html>
-<html lang="sv" xmlns:th="http://www.thymeleaf.org"><head>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <title>E‑handel</title>
-
-
     <link rel="stylesheet" href="/css/style.css">
 </head>
-    <body>
+<body>
 
-        <h1>Kunder</h1>
+<div class="container">
 
+    <h1>Kunder</h1>
+
+    <div class="card">
         <ul>
             <li th:each="c : ${customers.content}">
-                <span th:text="${c.name}"></span>
+                <strong th:text="${c.name}"></strong>
                 (<span th:text="${c.email}"></span>)
+                <br>
 
                 <a th:href="@{/customers/edit(email=${c.email})}">
                     Redigera
                 </a>
+
                 <form th:action="@{/customers/delete}" method="post" style="display:inline;">
                     <input type="hidden" name="email" th:value="${c.email}">
                     <button type="submit">Ta bort</button>
                 </form>
             </li>
         </ul>
-        <div>
+
+        <div class="pagination">
             <a th:if="${customers.hasPrevious()}"
                th:href="@{/(page=${customers.number - 1})}">
                 Föregående
@@ -40,41 +45,46 @@
                 Nästa
             </a>
         </div>
-        <hr>
+    </div>
 
+    <div class="card">
         <h2>Registrera ny kund</h2>
 
         <form action="/customers" method="post">
             <div>
-                <label for="name">Namn:</label><br>
-                <input type="text" id="name" name="name" required>
+                <label>Namn</label><br>
+                <input type="text" name="name" required>
             </div>
 
             <div>
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" required>
+                <label>Email</label><br>
+                <input type="email" name="email" required>
             </div>
 
-            <div><p th:if="${error}" style="color:red;" th:text="${error}"></p>
-                <p th:if="${success}" style="color:green;" th:text="${success}"></p>
-            </div>
-            <br>
             <button type="submit">Skapa kund</button>
         </form>
+    </div>
 
-        <h3>Välj aktiv kund</h3>
+    <div class="card">
+        <h2>Välj aktiv kund</h2>
 
         <form action="/select-customer" method="post">
             <select name="email">
-                <option th:each="c : ${customers}"
+                <option th:each="c : ${customers.content}"
                         th:value="${c.email}"
                         th:text="${c.name}">
                 </option>
             </select>
+            <br><br>
             <button type="submit">Välj kund</button>
         </form>
+    </div>
+
+    <div class="card">
         <a href="/orders">Mina ordrar</a>
-        <!-- JS -->
-        <script src="/js/app.js"></script>
-    </body>
+    </div>
+
+</div>
+
+</body>
 </html>

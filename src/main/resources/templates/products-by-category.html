@@ -2,26 +2,41 @@
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Produkter</title>
+    <title>Produkter per kategori</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1 th:text="'Kategori: ' + ${category}"></h1>
+<div class="container">
 
-<ul>
-    <li th:each="p : ${products}">
-        <span th:text="${p.name}"></span>
-        (<span th:text="${p.price}"></span>)
+    <h1 th:text="'Kategori: ' + ${category}"></h1>
 
-        <form th:action="@{/cart/add}" method="post">
-            <input type="hidden" name="sku" th:value="${p.sku}">
-            <input type="number" name="qty" value="1" min="1">
-            <button type="submit">Lägg i varukorg</button>
-        </form>
-    </li>
-</ul>
+    <div class="card">
+        <ul>
+            <li th:each="p : ${products}">
+                <strong th:text="${p.name}"></strong>
+                <span>
+                    (
+                    <span th:text="${p.price}"></span>
+                    )
+                </span>
 
-<a href="/products">Tillbaka</a>
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="sku" th:value="${p.sku}">
+                    <br>
+                    <input type="number" name="qty" value="1" min="1">
+                    <br><br>
+                    <button type="submit">Lägg i varukorg</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <a href="/products">Tillbaka till produkter</a>
+    </div>
+
+</div>
 
 </body>
 </html>

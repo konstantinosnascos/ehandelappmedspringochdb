@@ -3,40 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Varukorg</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1>Varukorg</h1>
+<div class="container">
 
-<table border="1">
-    <tr>
-        <th>Produkt</th>
-        <th>Antal</th>
-        <th>Pris</th>
-        <th>Åtgärd</th>
-    </tr>
+    <h1>Varukorg</h1>
 
-    <tr th:each="item : ${cart.items}">
-        <td th:text="${item.product.name}"></td>
-        <td th:text="${item.qty}"></td>
-        <td th:text="${item.product.price * item.qty}"></td>
-        <td>
-            <form th:action="@{/cart/remove}" method="post">
-                <input type="hidden" name="sku" th:value="${item.product.sku}">
-                <button type="submit">Ta bort</button>
-            </form>
-        </td>
-    </tr>
-</table>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Produkt</th>
+                <th>Antal</th>
+                <th>Pris</th>
+                <th>Åtgärd</th>
+            </tr>
 
-<br>
-    <a href="/checkout">Gå till checkout</a>
-<form th:action="@{/cart/clear}" method="post">
-    <button type="submit">Töm varukorg</button>
-</form>
+            <tr th:each="item : ${cart.items}">
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.qty}"></td>
+                <td th:text="${item.product.price * item.qty}"></td>
+                <td>
+                    <form th:action="@{/cart/remove}" method="post" style="display:inline;">
+                        <input type="hidden" name="sku" th:value="${item.product.sku}">
+                        <button type="submit">Ta bort</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-<br>
-<a href="/products">Tillbaka till produkter</a>
+    <div class="card">
+        <a href="/checkout">Gå till checkout</a>
+        <br><br>
+        <form th:action="@{/cart/clear}" method="post">
+            <button type="submit">Töm varukorg</button>
+        </form>
+        <br>
+        <a href="/products">Tillbaka till produkter</a>
+    </div>
+
+</div>
 
 </body>
 </html>

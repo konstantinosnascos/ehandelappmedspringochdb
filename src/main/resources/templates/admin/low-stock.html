@@ -1,27 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Low Stock</title>
+    <title>Lågt lager</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-    <body>
+<body>
 
-        <h2>Lågt lager (mindre än <span th:text="${threshold}"></span>)</h2>
+<div class="container">
 
-        <table border="1">
+    <h1>Lågt lager</h1>
+
+    <div class="card">
+        <h2>
+            Produkter med mindre än
+            <span th:text="${threshold}"></span>
+            i lager
+        </h2>
+
+        <table>
             <tr>
                 <th>Produkt</th>
                 <th>I lager</th>
             </tr>
-
             <tr th:each="p : ${lowStockProducts}">
                 <td th:text="${p.productName}"></td>
                 <td th:text="${p.inStock}"></td>
             </tr>
         </table>
+    </div>
 
-        <a href="/admin">Tillbaka</a>
+    <div class="card">
+        <a href="/admin">Tillbaka till dashboard</a>
+    </div>
 
-    </body>
+</div>
+
+</body>
 </html>

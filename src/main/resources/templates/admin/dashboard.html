@@ -1,21 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
-    <head>
-        <meta charset="UTF-8">
-        <title>Admin Dashboard</title>
-        <link rel="stylesheet" href="/css/style.css">
-    </head>
-    <body>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
 
-        <h1>Admin Dashboard</h1>
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="card">
+        <h2>Rapporter</h2>
 
         <ul>
-            <li><a href="/admin/reports/top-products">Top‑produkter</a></li>
-            <li><a href="/admin/reports/low-stock">Lågt lager</a></li>
-            <li><a href="/admin/reports/revenue">Omsättning</a></li>
+            <li>
+                <a href="/admin/reports/top-products">
+                    Top‑produkter
+                </a>
+            </li>
+            <li>
+                <a href="/admin/reports/low-stock">
+                    Lågt lager
+                </a>
+            </li>
+            <li>
+                <a href="/admin/reports/revenue">
+                    Omsättning
+                </a>
+            </li>
         </ul>
+    </div>
 
+    <div class="card">
         <a href="/">Tillbaka</a>
+    </div>
 
-    </body>
+</div>
+
+</body>
 </html>

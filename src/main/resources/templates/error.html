@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
-    <head>
-        <meta charset="UTF-8">
-        <title>Fel</title>
-        <link rel="stylesheet" href="/css/style.css">
-    </head>
-    <body>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
         <h1 th:text="${errorTitle}">Ett fel inträffade</h1>
         <p th:text="${errorMessage}">Något gick fel.</p>
+    </div>
 
-        <hr>
-
+    <div class="card">
         <a href="/">Till startsidan</a>
+    </div>
 
-    </body>
+</div>
 
+</body>
 </html>

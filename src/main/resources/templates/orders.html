@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Mina ordrar</title>
@@ -7,32 +7,39 @@
 </head>
 <body>
 
-<h1>Mina ordrar</h1>
+<div class="container">
 
-<table border="1">
-    <tr>
-        <th>Order‑ID</th>
-        <th>Datum</th>
-        <th>Status</th>
-        <th>Total</th>
-        <th></th>
-    </tr>
+    <h1>Mina ordrar</h1>
 
-    <tr th:each="o : ${orders}">
-        <td th:text="${o.id}"></td>
-        <td th:text="${#temporals.format(o.createdAt, 'yyyy‑MM‑dd HH:mm')}"></td>
-        <td th:text="${o.status}"></td>
-        <td th:text="${o.total}"></td>
-        <td>
-            <a th:href="@{/orders/{id}(id=${o.id})}">
-                Visa
-            </a>
-        </td>
-    </tr>
-</table>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Order‑ID</th>
+                <th>Datum</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
 
-<br>
-<a href="/products">Tillbaka till produkter</a>
+            <tr th:each="o : ${orders}">
+                <td th:text="${o.id}"></td>
+                <td th:text="${#temporals.format(o.createdAt, 'yyyy‑MM‑dd HH:mm')}"></td>
+                <td th:text="${o.status}"></td>
+                <td th:text="${o.total}"></td>
+                <td>
+                    <a th:href="@{/orders/{id}(id=${o.id})}">
+                        Visa
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <a href="/products">Tillbaka till produkter</a>
+    </div>
+
+</div>
 
 </body>
 </html>

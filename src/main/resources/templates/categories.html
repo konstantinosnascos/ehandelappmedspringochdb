@@ -7,23 +7,31 @@
 </head>
 <body>
 
-<h1>Kategorier</h1>
+<div class="container">
 
-<ul>
-    <li th:each="c : ${categories}" th:text="${c.name}"></li>
-</ul>
+    <h1>Kategorier</h1>
 
-<hr>
+    <div class="card">
+        <ul>
+            <li th:each="c : ${categories}" th:text="${c.name}"></li>
+        </ul>
+    </div>
 
-<h2>Skapa ny kategori</h2>
+    <div class="card">
+        <h2>Skapa ny kategori</h2>
 
-<form th:action="@{/categories}" method="post">
-    <input name="name" placeholder="Kategorinamn" required>
-    <button type="submit">Skapa</button>
-</form>
+        <form th:action="@{/categories}" method="post">
+            <input name="name" placeholder="Kategorinamn" required>
+            <br><br>
+            <button type="submit">Skapa</button>
+        </form>
+    </div>
 
-<br>
-<a href="/products">Tillbaka till produkter</a>
+    <div class="card">
+        <a href="/products">Tillbaka till produkter</a>
+    </div>
+
+</div>
 
 </body>
 </html>

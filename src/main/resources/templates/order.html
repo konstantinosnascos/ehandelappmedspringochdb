@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="sv" xmlns:th="http://www.thymeleaf.org"><head>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
-    <title>Beställning</title>
+    <title>Order</title>
     <link rel="stylesheet" href="/css/style.css">
-    </head>
-    <body>
+</head>
+<body>
 
-        <div th:if="${success}" style="color: green; font-weight: bold;">
-            <p th:text="${success}"></p>
-        </div>
+<div class="container">
 
-        <div th:if="${error}" style="color: red; font-weight: bold;">
-            <p th:text="${error}"></p>
-        </div>
+    <div th:if="${success}" class="card">
+        <p class="success" th:text="${success}"></p>
+    </div>
 
-        <h1>Order #<span th:text="${order.id}"></span></h1>
+    <div th:if="${error}" class="card">
+        <p class="error" th:text="${error}"></p>
+    </div>
 
+    <h1>Order #<span th:text="${order.id}"></span></h1>
+
+    <div class="card">
         <p>Status: <strong th:text="${order.status}"></strong></p>
 
         <div th:if="${payment != null}">
@@ -29,29 +33,39 @@
         <div th:if="${payment == null}">
             <p>Ingen betalning registrerad ännu.</p>
         </div>
+    </div>
 
+    <div class="card">
+        <h2>Orderrader</h2>
         <ul>
             <li th:each="i : ${order.items}">
                 <span th:text="${i.product.name}"></span>
-                x <span th:text="${i.qty}"></span>
+                × <span th:text="${i.qty}"></span>
             </li>
         </ul>
 
         <p>Total: <strong th:text="${order.total}"></strong></p>
+    </div>
 
-        <form th:if="${order.status.name() == 'NEW'}"
-              th:action="@{/orders/{id}/pay(id=${order.id})}" method="post">
+    <div class="card"
+         th:if="${order.status.name() == 'NEW'}">
+        <form th:action="@{/orders/{id}/pay(id=${order.id})}" method="post">
             <select name="method">
                 <option th:each="m : ${methods}"
                         th:value="${m}"
                         th:text="${m}">
                 </option>
             </select>
+            <br><br>
             <button type="submit">Betala</button>
         </form>
+    </div>
 
-        <br>
+    <div class="card">
         <a href="/">Tillbaka</a>
+    </div>
 
-    </body>
+</div>
+
+</body>
 </html>

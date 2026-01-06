@@ -7,101 +7,115 @@
 </head>
 <body>
 
-<h1>Produkter</h1>
+<div class="container">
 
-<h2>Aktiva produkter</h2>
+    <h1>Produkter</h1>
 
-<table border="1">
-    <tr>
-        <th>SKU</th>
-        <th>Namn</th>
-        <th>Pris</th>
-        <th>Lager</th>
-        <th>Åtgärd</th>
-    </tr>
+    <div class="card">
+        <h2>Aktiva produkter</h2>
 
-    <tr th:each="p : ${activeProducts.content}">
-        <td th:text="${p.sku}"></td>
-        <td th:text="${p.name}"></td>
-        <td th:text="${p.price}"></td>
-        <td th:text="${inventoryService.getStockLevel(p.id)}"></td>
-        <td>
-            <form th:action="@{/products/deactivate}" method="post">
-                <input type="hidden" name="productId" th:value="${p.id}">
-                <button type="submit">Inaktivera</button>
-            </form>
-            <form th:action="@{/products/add-category}" method="post">
-                <input type="hidden" name="productId" th:value="${p.id}">
+        <table>
+            <tr>
+                <th>SKU</th>
+                <th>Namn</th>
+                <th>Pris</th>
+                <th>Lager</th>
+                <th>Åtgärder</th>
+            </tr>
 
-                <select name="categoryId">
-                    <option th:each="c : ${categories}"
-                            th:value="${c.id}"
-                            th:text="${c.name}">
-                    </option>
-                </select>
+            <tr th:each="p : ${activeProducts.content}">
+                <td th:text="${p.sku}"></td>
+                <td th:text="${p.name}"></td>
+                <td th:text="${p.price}"></td>
+                <td th:text="${inventoryService.getStockLevel(p.id)}"></td>
+                <td>
+                    <form th:action="@{/products/deactivate}" method="post" style="display:inline;">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <button type="submit">Inaktivera</button>
+                    </form>
 
-                <button type="submit">Lägg till</button>
-            </form>
-        </td>
-    </tr>
-</table>
-<div>
-    <a th:if="${activeProducts.hasPrevious()}"
-       th:href="@{/products(page=${activeProducts.number - 1})}">
-        Föregående
-    </a>
+                    <form th:action="@{/products/add-category}" method="post">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <select name="categoryId">
+                            <option th:each="c : ${categories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.name}">
+                            </option>
+                        </select>
+                        <button type="submit">Lägg till</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
 
-    <span>
-        Sida <span th:text="${activeProducts.number + 1}"></span>
-        av <span th:text="${activeProducts.totalPages}"></span>
-    </span>
+        <div class="pagination">
+            <a th:if="${activeProducts.hasPrevious()}"
+               th:href="@{/products(page=${activeProducts.number - 1})}">
+                Föregående
+            </a>
 
-    <a th:if="${activeProducts.hasNext()}"
-       th:href="@{/products(page=${activeProducts.number + 1})}">
-        Nästa
-    </a>
+            <span>
+                Sida <span th:text="${activeProducts.number + 1}"></span>
+                av <span th:text="${activeProducts.totalPages}"></span>
+            </span>
+
+            <a th:if="${activeProducts.hasNext()}"
+               th:href="@{/products(page=${activeProducts.number + 1})}">
+                Nästa
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Inaktiva produkter</h2>
+
+        <table>
+            <tr>
+                <th>SKU</th>
+                <th>Namn</th>
+                <th>Pris</th>
+                <th></th>
+            </tr>
+
+            <tr th:each="p : ${inactiveProducts}">
+                <td th:text="${p.sku}"></td>
+                <td th:text="${p.name}"></td>
+                <td th:text="${p.price}"></td>
+                <td>
+                    <form th:action="@{/products/activate}" method="post">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <button type="submit">Aktivera</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Skapa ny produkt</h2>
+
+        <form th:action="@{/products}" method="post">
+            <input name="sku" placeholder="SKU" required>
+            <br><br>
+            <input name="name" placeholder="Namn" required>
+            <br><br>
+            <input name="description" placeholder="Beskrivning">
+            <br><br>
+            <input name="price" type="number" step="0.01" placeholder="Pris" required>
+            <br><br>
+            <input name="stock" type="number" placeholder="Startlager" required>
+            <br><br>
+            <button type="submit">Skapa</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <a href="/orders">Visa mina ordrar</a>
+        <br><br>
+        <a href="/">Tillbaka</a>
+    </div>
+
 </div>
-
-<h2>Inaktiva produkter</h2>
-
-<table border="1">
-    <tr>
-        <th>SKU</th>
-        <th>Namn</th>
-        <th>Pris</th>
-        <th>Åtgärd</th>
-    </tr>
-
-    <tr th:each="p : ${inactiveProducts}">
-        <td th:text="${p.sku}"></td>
-        <td th:text="${p.name}"></td>
-        <td th:text="${p.price}"></td>
-        <td>
-            <form th:action="@{/products/activate}" method="post">
-                <input type="hidden" name="productId" th:value="${p.id}">
-                <button type="submit">Aktivera</button>
-            </form>
-        </td>
-    </tr>
-</table>
-
-<hr>
-
-<h2>Skapa ny produkt</h2>
-
-<form th:action="@{/products}" method="post">
-    <input name="sku" placeholder="SKU" required>
-    <input name="name" placeholder="Namn" required>
-    <input name="description" placeholder="Beskrivning">
-    <input name="price" type="number" step="0.01" placeholder="Pris" required>
-    <input name="stock" type="number" placeholder="Startlager" required>
-    <button type="submit">Skapa</button>
-</form>
-
-<br>
-<a href="/orders">Visa mina ordrar</a>
-<a href="/">Tillbaka</a>
-
 
 </body>
 </html>

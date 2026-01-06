@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Checkout</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1>Checkout</h1>
+<div class="container">
 
-<table border="1">
-    <tr>
-        <th>Produkt</th>
-        <th>Antal</th>
-        <th>Pris</th>
-    </tr>
-    <tr th:each="item : ${cart.items}">
-        <td th:text="${item.product.name}"></td>
-        <td th:text="${item.qty}"></td>
-        <td th:text="${item.product.price * item.qty}"></td>
-    </tr>
-</table>
+    <h1>Checkout</h1>
 
-<br>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Produkt</th>
+                <th>Antal</th>
+                <th>Pris</th>
+            </tr>
 
-<form th:action="@{/checkout}" method="post">
-    <button type="submit">Skapa order</button>
-</form>
+            <tr th:each="item : ${cart.items}">
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.qty}"></td>
+                <td th:text="${item.product.price * item.qty}"></td>
+            </tr>
+        </table>
+    </div>
 
-<br>
-<a href="/cart">Tillbaka till varukorg</a>
+    <div class="card">
+        <form th:action="@{/checkout}" method="post">
+            <button type="submit">Skapa order</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <a href="/cart">Tillbaka till varukorg</a>
+    </div>
+
+</div>
 
 </body>
 </html>
